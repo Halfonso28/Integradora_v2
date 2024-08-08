@@ -1,5 +1,5 @@
 <?php
-require_once("Clases/Conexion.php");
+require_once("Clases/Conexion.php"); //Esta
 class Autenticador extends Conexion{
     public function __construct() {
         parent::__construct();
