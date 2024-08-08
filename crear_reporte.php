@@ -52,6 +52,10 @@ session_start();
         </div>
     </nav>
 
+    <form action="" method="POST" id="formulario">
+        <img src="IMG/personas-ticked.jpg" class="formulario-imagen">
+    </form>
+
 </body>
 
 </html>
