@@ -17,6 +17,10 @@
     <title>Encuesta</title>
 </head>
 <body>
-    <form action="" method="POST" id="formulario"></form>
+    <form action="" method="POST" id="formulario">
+        <div class="div-grupo">
+            <label for="p1"></label>
+        </div>
+    </form>
 </body>
 </html>
