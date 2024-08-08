@@ -9,5 +9,9 @@ class Encuesta extends Conexion{
         $stmt = $this->conexion->prepare("CALL insertar_respuesta(?, ?, ?)");
         $stmt->execute([$id_ticket, $pregunta_id, $calificacion]);
     }
+
+    
 }
+
+
 ?>
