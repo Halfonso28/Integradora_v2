@@ -1,0 +1,143 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #f0fcff;
+}
+
+/* Estilos Barra de Navegacion */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 75px;
+    font-family: "Poppins", sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    font-weight: 400;
+}
+
+.nav-boton {
+    background-color: #8b3dff;
+    border: 0;
+    border-radius: 5px;
+    margin: 0px 8px;
+}
+
+#btn-ingresar {
+    color: white;
+    display: block;
+    padding: 8px 14px;
+}
+
+.nombre-pagina {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding-left: 100px;
+}
+
+.div-enlaces {
+    margin: 0px 20px;
+}
+
+.nav-enlace {
+    margin: 0px 8px;
+    padding-bottom: 3px;
+    font-size: 17px;
+    font-family: "Lato", sans-serif;
+}
+
+.nav-enlace:hover {
+    border-bottom: 1px solid black;
+}
+
+.nav-enlace-subrayado {
+    border-bottom: 1px solid black;
+}
+
+/* Fin estilos Barra de Navegacion */
+
+#formulario {
+    font-family: "Poppins", sans-serif;
+    width: 450px;
+    height: 100%;
+    padding: 50px 40px;
+    margin: auto;
+    margin-top: 8%;
+    border-radius: 10px;
+    background: white;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.p-inicio {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 500;
+    border-bottom: 2px solid #8b3dff;
+    margin-bottom: 25px;
+}
+.formulario-grupo{
+    width: 90%;
+    margin: auto;
+    margin-bottom: 20px;
+}
+.formulario-label{
+    display: block;
+    font-size: 16px;
+}
+.formulario-input{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: transparent;
+}
+.formulario-enlace{
+    text-align: center;
+    display: block;
+    color: #009bff;
+    font-size: 15px;
+    font-weight: 400;
+}
+.btn-submit{
+    border: transparent;
+    border-radius: 5px;
+    margin: auto;
+    display: block;
+    margin-top: 10px;
+    background-color: #8b3dff;
+    color: #fff;
+    font-weight: 500;
+    padding: 10px 30px;
+}
+
+.img-logo{
+    margin: auto;
+    display: block;
+    margin-top: 100px;
+    border-radius: 10px;
+}
+
+/* mediaquerys */
+@media (max-width:768px) {
+    #formulario{
+        width: 90%;
+        margin: 35px auto;
+    }
+}
+
+
+/* Opciones */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}

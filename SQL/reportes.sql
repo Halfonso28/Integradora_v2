@@ -1,0 +1,461 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 04-08-2024 a las 00:45:51
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `integradora`
+--
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_estado_ticket` (IN `ticket_id` INT, IN `nuevo_estado` ENUM('Nuevo','En progreso','Finalizado'))   BEGIN
+    UPDATE ticket SET estado = nuevo_estado WHERE id = ticket_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cambiar_contraseña_usuario` (IN `usuario_id` INT, IN `nueva_contraseña` VARCHAR(100))   BEGIN
+    UPDATE usuario SET contraseña = nueva_contraseña WHERE id = usuario_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_mensaje_chat` (IN `id_ticket` INT, IN `mensaje` TEXT)   BEGIN
+    INSERT INTO chat (id_ticket, mensaje, fecha_envio)
+    VALUES (id_ticket, mensaje, NOW());
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_respuesta` (IN `id_ticket` INT, IN `pregunta_id` INT, IN `calificacion` VARCHAR(255))   BEGIN
+    INSERT INTO respuestas (id_ticket, pregunta_id, calificacion)
+    VALUES (id_ticket, pregunta_id, calificacion);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_soporte` (IN `id_usuario` INT, IN `curp` CHAR(18), IN `rfc` VARCHAR(13), IN `numero_seguro_social` CHAR(11))   BEGIN
+    INSERT INTO soporte (id_usuario, curp, rfc, numero_seguro_social)
+    VALUES (id_usuario, curp, rfc, numero_seguro_social);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_usuario` (IN `nombre` VARCHAR(100), IN `apellido_paterno` VARCHAR(100), IN `apellido_materno` VARCHAR(100), IN `correo` VARCHAR(100), IN `usuario` VARCHAR(100), IN `contraseña` VARCHAR(100), IN `telefono` CHAR(10), IN `fecha_nacimiento` DATE, IN `rol` ENUM('admin','usuario','soporte'))   BEGIN
+    INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, usuario, contraseña, telefono, fecha_nacimiento, rol)
+    VALUES (nombre, apellido_paterno, apellido_materno, correo, usuario, contraseña, telefono, fecha_nacimiento, rol);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_chats_por_ticket` (IN `ticket_id` INT)   BEGIN
+    SELECT c.id, c.mensaje, c.fecha_envio
+    FROM chat c
+    WHERE c.id_ticket = ticket_id
+    ORDER BY c.fecha_envio;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_estado` (IN `estado_ticket` ENUM('Nuevo','En progreso','Finalizado'))   BEGIN
+    SELECT t.id, t.descripcion, u.usuario AS usuario, s.id_usuario AS soporte_usuario, t.fecha_creacion, t.fecha_cierre
+    FROM ticket t
+    JOIN usuario u ON t.id_usuario = u.id
+    JOIN soporte s ON t.id_soporte = s.id
+    WHERE t.estado = estado_ticket;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_usuario` (IN `usuario_id` INT)   BEGIN
+    SELECT t.id, t.descripcion, t.estado, t.fecha_creacion, t.fecha_cierre
+    FROM ticket t
+    WHERE t.id_usuario = usuario_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_usuarios_por_rol` (IN `rol_usuario` ENUM('admin','usuario','soporte'))   BEGIN
+    SELECT id, usuario, correo
+    FROM usuario
+    WHERE rol = rol_usuario;
+END$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `chat`
+--
+
+CREATE TABLE `chat` (
+  `id` int(11) NOT NULL,
+  `id_ticket` int(11) DEFAULT NULL,
+  `mensaje` text DEFAULT NULL,
+  `fecha_envio` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pregunta`
+--
+
+CREATE TABLE `pregunta` (
+  `id` int(11) NOT NULL,
+  `pregunta` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `respuestas`
+--
+
+CREATE TABLE `respuestas` (
+  `id` int(11) NOT NULL,
+  `id_ticket` int(11) DEFAULT NULL,
+  `pregunta_id` int(11) DEFAULT NULL,
+  `calificacion` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `soporte`
+--
+
+CREATE TABLE `soporte` (
+  `id` int(11) NOT NULL,
+  `id_usuario` int(11) DEFAULT NULL,
+  `curp` char(18) NOT NULL,
+  `rfc` varchar(13) NOT NULL,
+  `numero_seguro_social` char(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ticket`
+--
+
+CREATE TABLE `ticket` (
+  `id` int(11) NOT NULL,
+  `id_soporte` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `descripcion` text NOT NULL,
+  `fecha_creacion` datetime DEFAULT current_timestamp(),
+  `fecha_cierre` datetime DEFAULT NULL,
+  `estado` enum('Nuevo','En progreso','Finalizado') DEFAULT 'Nuevo',
+  `id_encuesta` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(100) NOT NULL,
+  `contraseña` varchar(100) NOT NULL,
+  `correo` varchar(100) NOT NULL,
+  `estado` tinyint(1) DEFAULT 0,
+  `nombre` varchar(100) DEFAULT NULL,
+  `apellido_paterno` varchar(100) DEFAULT NULL,
+  `apellido_materno` varchar(100) DEFAULT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `telefono` char(10) NOT NULL,
+  `rol` enum('admin','usuario','soporte') DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_chats_por_ticket`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `view_chats_por_ticket` (
+`chat_id` int(11)
+,`id_ticket` int(11)
+,`descripcion_ticket` text
+,`mensaje` text
+,`fecha_envio` datetime
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_respuestas_por_ticket`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `view_respuestas_por_ticket` (
+`respuesta_id` int(11)
+,`id_ticket` int(11)
+,`pregunta` varchar(255)
+,`calificacion` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_soportes_info_usuario`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `view_soportes_info_usuario` (
+`soporte_id` int(11)
+,`nombre_usuario` varchar(100)
+,`apellido_usuario` varchar(100)
+,`curp` char(18)
+,`rfc` varchar(13)
+,`numero_seguro_social` char(11)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_tickets_detalle`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `view_tickets_detalle` (
+`ticket_id` int(11)
+,`descripcion` text
+,`fecha_creacion` datetime
+,`fecha_cierre` datetime
+,`estado` enum('Nuevo','En progreso','Finalizado')
+,`nombre_usuario` varchar(100)
+,`apellido_usuario` varchar(100)
+,`id_soporte` int(11)
+,`curp_soporte` char(18)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_tickets_finalizados`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `view_tickets_finalizados` (
+`id` int(11)
+,`descripcion` text
+,`fecha_creacion` datetime
+,`fecha_cierre` datetime
+,`id_usuario` int(11)
+,`id_soporte` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_tickets_por_usuario`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `view_tickets_por_usuario` (
+`usuario_id` int(11)
+,`nombre` varchar(100)
+,`apellido_paterno` varchar(100)
+,`total_tickets` bigint(21)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_usuarios_activos`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `view_usuarios_activos` (
+`id` int(11)
+,`usuario` varchar(100)
+,`correo` varchar(100)
+,`nombre` varchar(100)
+,`apellido_paterno` varchar(100)
+,`apellido_materno` varchar(100)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `view_chats_por_ticket`
+--
+DROP TABLE IF EXISTS `view_chats_por_ticket`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_chats_por_ticket`  AS SELECT `c`.`id` AS `chat_id`, `c`.`id_ticket` AS `id_ticket`, `t`.`descripcion` AS `descripcion_ticket`, `c`.`mensaje` AS `mensaje`, `c`.`fecha_envio` AS `fecha_envio` FROM (`chat` `c` join `ticket` `t` on(`c`.`id_ticket` = `t`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `view_respuestas_por_ticket`
+--
+DROP TABLE IF EXISTS `view_respuestas_por_ticket`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_respuestas_por_ticket`  AS SELECT `r`.`id` AS `respuesta_id`, `r`.`id_ticket` AS `id_ticket`, `p`.`pregunta` AS `pregunta`, `r`.`calificacion` AS `calificacion` FROM (`respuestas` `r` join `pregunta` `p` on(`r`.`pregunta_id` = `p`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `view_soportes_info_usuario`
+--
+DROP TABLE IF EXISTS `view_soportes_info_usuario`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_soportes_info_usuario`  AS SELECT `s`.`id` AS `soporte_id`, `u`.`nombre` AS `nombre_usuario`, `u`.`apellido_paterno` AS `apellido_usuario`, `s`.`curp` AS `curp`, `s`.`rfc` AS `rfc`, `s`.`numero_seguro_social` AS `numero_seguro_social` FROM (`soporte` `s` join `usuario` `u` on(`s`.`id_usuario` = `u`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `view_tickets_detalle`
+--
+DROP TABLE IF EXISTS `view_tickets_detalle`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_tickets_detalle`  AS SELECT `t`.`id` AS `ticket_id`, `t`.`descripcion` AS `descripcion`, `t`.`fecha_creacion` AS `fecha_creacion`, `t`.`fecha_cierre` AS `fecha_cierre`, `t`.`estado` AS `estado`, `u`.`nombre` AS `nombre_usuario`, `u`.`apellido_paterno` AS `apellido_usuario`, `s`.`id_usuario` AS `id_soporte`, `s`.`curp` AS `curp_soporte` FROM ((`ticket` `t` join `usuario` `u` on(`t`.`id_usuario` = `u`.`id`)) join `soporte` `s` on(`t`.`id_soporte` = `s`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `view_tickets_finalizados`
+--
+DROP TABLE IF EXISTS `view_tickets_finalizados`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_tickets_finalizados`  AS SELECT `ticket`.`id` AS `id`, `ticket`.`descripcion` AS `descripcion`, `ticket`.`fecha_creacion` AS `fecha_creacion`, `ticket`.`fecha_cierre` AS `fecha_cierre`, `ticket`.`id_usuario` AS `id_usuario`, `ticket`.`id_soporte` AS `id_soporte` FROM `ticket` WHERE `ticket`.`estado` = 'Finalizado' ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `view_tickets_por_usuario`
+--
+DROP TABLE IF EXISTS `view_tickets_por_usuario`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_tickets_por_usuario`  AS SELECT `u`.`id` AS `usuario_id`, `u`.`nombre` AS `nombre`, `u`.`apellido_paterno` AS `apellido_paterno`, count(`t`.`id`) AS `total_tickets` FROM (`usuario` `u` left join `ticket` `t` on(`u`.`id` = `t`.`id_usuario`)) GROUP BY `u`.`id` ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `view_usuarios_activos`
+--
+DROP TABLE IF EXISTS `view_usuarios_activos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_usuarios_activos`  AS SELECT `usuario`.`id` AS `id`, `usuario`.`usuario` AS `usuario`, `usuario`.`correo` AS `correo`, `usuario`.`nombre` AS `nombre`, `usuario`.`apellido_paterno` AS `apellido_paterno`, `usuario`.`apellido_materno` AS `apellido_materno` FROM `usuario` WHERE `usuario`.`estado` = 1 ;
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `chat`
+--
+ALTER TABLE `chat`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_ticket` (`id_ticket`);
+
+--
+-- Indices de la tabla `pregunta`
+--
+ALTER TABLE `pregunta`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `respuestas`
+--
+ALTER TABLE `respuestas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_ticket` (`id_ticket`),
+  ADD KEY `pregunta_id` (`pregunta_id`);
+
+--
+-- Indices de la tabla `soporte`
+--
+ALTER TABLE `soporte`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `curp` (`curp`),
+  ADD UNIQUE KEY `rfc` (`rfc`),
+  ADD UNIQUE KEY `numero_seguro_social` (`numero_seguro_social`),
+  ADD KEY `id_usuario` (`id_usuario`);
+
+--
+-- Indices de la tabla `ticket`
+--
+ALTER TABLE `ticket`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_soporte` (`id_soporte`),
+  ADD KEY `id_usuario` (`id_usuario`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `chat`
+--
+ALTER TABLE `chat`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `pregunta`
+--
+ALTER TABLE `pregunta`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `respuestas`
+--
+ALTER TABLE `respuestas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `soporte`
+--
+ALTER TABLE `soporte`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `ticket`
+--
+ALTER TABLE `ticket`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `chat`
+--
+ALTER TABLE `chat`
+  ADD CONSTRAINT `chat_ibfk_1` FOREIGN KEY (`id_ticket`) REFERENCES `ticket` (`id`);
+
+--
+-- Filtros para la tabla `respuestas`
+--
+ALTER TABLE `respuestas`
+  ADD CONSTRAINT `respuestas_ibfk_1` FOREIGN KEY (`id_ticket`) REFERENCES `ticket` (`id`),
+  ADD CONSTRAINT `respuestas_ibfk_2` FOREIGN KEY (`pregunta_id`) REFERENCES `pregunta` (`id`);
+
+--
+-- Filtros para la tabla `soporte`
+--
+ALTER TABLE `soporte`
+  ADD CONSTRAINT `soporte_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`);
+
+--
+-- Filtros para la tabla `ticket`
+--
+ALTER TABLE `ticket`
+  ADD CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`id_soporte`) REFERENCES `soporte` (`id`),
+  ADD CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -1,0 +1,101 @@
+*{
+    box-sizing: border-box;
+}
+/* Estilos Barra de Navegacion */
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 75px;
+    font-family: "Poppins", sans-serif;
+}
+.logo{
+    height: 120px;
+    position: relative;
+    margin-top: 100px;
+    margin-left: 20px;
+}
+a{
+    text-decoration: none;
+    color: black;
+    font-weight: 400;
+}
+.nav-boton{
+    background-color: #8b3dff;
+    border: 0;
+    border-radius: 5px;
+
+    margin: 0px 8px;
+}
+#btn-registrate{
+    color: white;
+    display: block;
+    padding: 8px 14px;
+}
+.nombre-pagina{
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding-left: 50px;
+}
+.div-enlaces{
+    margin: 0px 20px;
+}
+.nav-enlace{
+    margin: 0px 8px;
+    padding-bottom: 3px;
+    font-size: 17px;
+    font-family: "Lato", sans-serif;
+}
+.nav-enlace:hover{
+    border-bottom: 1px solid black;
+}
+.nav-enlace-subrayado{
+    border-bottom: 1px solid black;
+}
+/* Fin estilos Barra de Navegacion */
+main{
+    height: 550px;
+    justify-content: center;
+    align-items: center;
+    font-family: "Poppins", sans-serif;
+}
+.div-presentacion{
+    padding-left: 100px;
+    padding-right: 50px;
+}
+.p-presentacion{
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 55px;
+}
+.p-calificacion{
+    font-size: 18px;
+}
+.btn-presentacion{
+    width: 200px;
+    height: 60px;
+    background: #8b3dff;
+    border: 0;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 400;
+    margin-top: 10px;
+}
+.btn-presentacion>a{
+    color: white;
+}
+#section1{
+    background-color: black;
+    height: 500px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#section1>p{
+    color: white;
+    width: 30%;
+    font-size: 20px;
+}
