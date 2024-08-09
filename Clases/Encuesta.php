@@ -5,11 +5,35 @@ class Encuesta extends Conexion{
     }
 
     
+    
     public function insertarRespuesta($id_ticket, $pregunta_id, $calificacion) {
         $stmt = $this->conexion->prepare("CALL insertar_respuesta(?, ?, ?)");
         $stmt->execute([$id_ticket, $pregunta_id, $calificacion]);
     }
 
+
+    public function insertarTicket($id_usuario, $descripcion) {
+        // Verificamos que la descripción no esté vacía
+        if (empty($descripcion)) {
+            return "La descripción no puede estar vacía.";
+        }
+
+        try {
+            // Preparamos la consulta SQL para insertar el ticket
+            $sql = "INSERT INTO ticket (id_usuario, descripcion) VALUES (?, ?)";
+            $stmt = $this->getConexion()->prepare($sql);
+            
+            // Ejecutamos la consulta con los valores directamente
+            if ($stmt->execute([$id_usuario, $descripcion])) {
+                return "Ticket creado exitosamente.";
+            } else {
+                return "Error al crear el ticket.";
+            }
+        } catch (PDOException $e) {
+            // En caso de un error, retornamos el mensaje
+            return "Error: " . $e->getMessage();
+        }
+    }
 
 }
 
