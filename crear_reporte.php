@@ -54,6 +54,14 @@ session_start();
 
     <form action="" method="POST" id="formulario">
         <img src="IMG/personas-ticked.jpg" class="formulario-imagen">
+        <p class="formulario-titulo">¿Tuviste algún inconveniente con tu servicio de transporte? Nos interesa saber todos los detalles para poder ayudarte. Por favor, cuéntanos aquí lo que sucedió.</p>
+        <div class="formulario-grupo">
+            <label for="" class="formulario-label">Descripción del problema:</label>
+            <div class="formulario-grupo-input">
+                <textarea name="descripcion" id="descripcion" class="formulario-textarea" rows="4" cols="50" required></textarea>
+            </div>
+        </div>
+        <button type="submit" class="formulario-btn-submit">Enviar</button>
     </form>
 
 </body>
