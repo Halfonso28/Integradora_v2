@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <img src="IMG/persona-laptop.jpg" alt="" class="seccion-imagen">
             <strong class="seccion-parrafo">¿Tuviste problemas con tu viaje?</strong>
             <p class="seccion-parrafo">Aqui te ayudamos a resolverlo. Genera un reporte dónde especifique lo que paso.</p>
-            <button class="seccion-boton"><a href="#" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
+            <button class="seccion-boton"><a href="crear_reporte.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
         </div>
         <!-- Grupo Chat -->
         <div class="col-md-4 col-sm-12 seccion-grupo">
