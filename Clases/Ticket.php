@@ -1,5 +1,5 @@
 <?php
-
+require_once("Clases/Conexion.php");
 class Ticket extends Conexion{
     public function __construct() {
         parent::__construct();
@@ -25,8 +25,19 @@ class Ticket extends Conexion{
     public function obtenerTicketsPorUsuario($usuario_id) {
         $stmt = $this->conexion->prepare("CALL obtener_tickets_por_usuario(?)");
         $stmt->execute([$usuario_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+
+    public function crearTicket($id_usuario, $descripcion) {
+        try {
+            $stmt = $this->conexion->prepare("INSERT INTO ticket (id_usuario, descripcion) VALUES (?, ?)");
+            $stmt->execute([$id_usuario, $descripcion]);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
 }
+
 
 ?>

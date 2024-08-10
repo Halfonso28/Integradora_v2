@@ -47,7 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <p class="nav-enlace">Reportes <i class="fa-solid fa-caret-down"></i></p>
                 <div class="submenu">
                     <a href="crear_reporte.php" class="nav-enlace-submenu">Crear</a>
-                    <a href="#" class="nav-enlace-submenu">Historial</a>
+                    <a href="historial_ticked.php" class="nav-enlace-submenu">Historial</a>
+                    <!-- <a href="./reporte_teresa/gradica.php" class="nav-enlace-submenu">Historial</a> -->
                 </div>
             </div>
             <div class="contendor-submenu">

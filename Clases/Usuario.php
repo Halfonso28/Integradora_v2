@@ -1,4 +1,5 @@
 <?php
+require_once("Clases/Conexion.php");
 
 class Usuario extends Conexion{
     public function __construct() {
@@ -10,7 +11,7 @@ class Usuario extends Conexion{
     }
 
     public function insertarUsuario($nombre, $apellido_paterno, $apellido_materno, $correo, $usuario, $contraseña, $telefono, $fecha_nacimiento, $rol) {
-        $stmt = $this->conexion->prepare("CALL insertar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $this->conexion->prepare("CALL registrar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $usuario, $contraseña, $telefono, $fecha_nacimiento, $rol]);
     }
 

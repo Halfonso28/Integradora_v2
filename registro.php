@@ -27,7 +27,7 @@
     </nav>
     <!-- <i class="fa-solid fa-check"></i>
     <i class="fa-solid fa-xmark"></i> -->
-    <form action="" method="POST" class="container-fluid" id="formulario">
+    <form action="a_registro.php" method="POST" class="container-fluid" id="formulario">
         <p class="p-inicio">¡Bienvenido a Viajero Digital!</p>
         <p class="p-instrucciones">Por favor, completa el registro para disfrutar de los beneficios de Viajero Digital.</p>
         <!-- Grupo Nombre -->

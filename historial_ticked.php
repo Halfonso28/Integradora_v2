@@ -1,5 +1,9 @@
 <?php
 session_start();
+require_once("Clases/Ticket.php");
+
+$ticked=new Ticket();
+
 ?>
 
 <!DOCTYPE html>
@@ -13,12 +17,11 @@ session_start();
     <!-- FontAwesome -->
     <script src="https://kit.fontawesome.com/79795cbd8e.js" crossorigin="anonymous"></script>
     <!-- Fin de Enlaces Externos -->
-    <link rel="stylesheet" href="CSS/crear_reporte.css">
+    <link rel="stylesheet" href="CSS/historial_reporte.css">
     <link rel="stylesheet" href="CSS/fuentes.css">
     <link rel="icon" href="IMG/logo.png" type="image/x-icon">
     <title>Crear Reportes</title>
 </head>
-
 <body>
     <nav>
         <!-- <input type="checkbox" id="check-menu">
@@ -30,7 +33,7 @@ session_start();
                 <a href="#" class="nav-enlace nav-enlace-seleccionado">Reportes <i class="fa-solid fa-caret-down"></i></a>
                 <div class="submenu">
                     <a href="crear_reporte.php" class="nav-enlace-submenu">Crear</a>
-                    <a href="historial_ticked.php" class="nav-enlace-submenu">Historial</a>
+                    <a href="#" class="nav-enlace-submenu">Historial</a>
                 </div>
             </div>
             <div class="contendor-submenu">
@@ -52,17 +55,21 @@ session_start();
         </div>
     </nav>
 
-    <form action="a_crearTicked.php" method="POST" id="formulario">
-        <img src="IMG/personas-ticked.jpg" class="formulario-imagen">
-        <p class="formulario-titulo">¿Tuviste algún inconveniente con tu servicio de transporte? Nos interesa saber todos los detalles para poder ayudarte. Por favor, cuéntanos aquí lo que sucedió.</p>
-        <div class="formulario-grupo">
-            <label for="" class="formulario-label">Descripción del problema:</label>
-            <div class="formulario-grupo-input">
-                <textarea name="descripcion" id="descripcion" class="formulario-textarea" rows="4" cols="50" required></textarea>
-            </div>
-        </div>
-        <button type="submit" class="formulario-btn-submit">Enviar</button>
-    </form>
+    <main>
+    <?php 
+        $tickeds=$ticked->obtenerTicketsPorUsuario($_SESSION["usuario_id"]);
+        foreach($tickeds as $usuarioTicked){
+    ?>
+        <p class="tabla-titulo">Nombre:</p>
+        <p class="tabla-titulo">Descripcion:</p>
+        <p class="tabla-titulo">Acciones:</p>
+        <p class="tabla-p"><?php echo json_decode($_SESSION['usuario']); ?></p>
+        <p class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></p>
+        <button class="tabla-btn" disabled><a href="encuesta.php" class="tabla-enlace">Encuesta</a></button>
+    <?php
+        }
+    ?>
+    </main>
 
 </body>
 

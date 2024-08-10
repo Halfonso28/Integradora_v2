@@ -8,11 +8,11 @@ class Autenticador extends Conexion{
     public function login($usuario, $contraseña) {
         $stmt = $this->conexion->prepare("SELECT * FROM usuario WHERE usuario = ? AND contraseña = ?");
         try{
-            $stmt->execute([$usuario, $contraseña]);
+            $stmt->execute([$usuario, hash('sha256',$contraseña)]);
             $usuario=$stmt->fetchObject();
             if($usuario) {
                 session_start();
-                $_SESSION['id'] = $usuario->id;
+                $_SESSION['usuario_id'] = $usuario->id;
                 $_SESSION['usuario'] = json_encode($usuario->usuario);
                 $_SESSION['rol'] = $usuario->rol;
                 $_SESSION['estadoSesion']=true;
