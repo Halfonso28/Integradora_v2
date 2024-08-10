@@ -18,8 +18,10 @@ class Usuario extends Conexion{
     public function obtenerUsuariosPorRol($rol_usuario) {
         $stmt = $this->conexion->prepare("CALL obtener_usuarios_por_rol(?)");
         $stmt->execute([$rol_usuario]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+
+    //cambiar estado de usuario ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 }
 
 ?>

@@ -5,7 +5,6 @@ class Encuesta extends Conexion{
     }
 
     
-    
     public function insertarRespuesta($id_ticket, $pregunta_id, $calificacion) {
         $stmt = $this->conexion->prepare("CALL insertar_respuesta(?, ?, ?)");
         $stmt->execute([$id_ticket, $pregunta_id, $calificacion]);
@@ -33,6 +32,9 @@ class Encuesta extends Conexion{
             // En caso de un error, retornamos el mensaje
             return "Error: " . $e->getMessage();
         }
+
+        //(falta)asociar encuesta con ticket ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
     }
 
 }
