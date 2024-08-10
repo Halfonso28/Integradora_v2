@@ -25,17 +25,17 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_estado_ticket` (IN `ticket_id` INT, IN `nuevo_estado` ENUM('Nuevo','En progreso','Finalizado'))   BEGIN
-    UPDATE ticket SET estado = nuevo_estado WHERE id = ticket_id;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_estado_usuario` (IN `usuario_id` INT, IN `nuevo_estado` TINYINT)   BEGIN
+    UPDATE usuario SET estado = nuevo_estado WHERE id = usuario_id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cambiar_contraseña_usuario` (IN `usuario_id` INT, IN `nueva_contraseña` VARCHAR(100))   BEGIN
     UPDATE usuario SET contraseña = nueva_contraseña WHERE id = usuario_id;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_mensaje_chat` (IN `id_ticket` INT, IN `mensaje` TEXT)   BEGIN
-    INSERT INTO chat (id_ticket, mensaje, fecha_envio)
-    VALUES (id_ticket, mensaje, NOW());
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_mensaje_chat` (IN `id_ticket` INT, IN `id_usuario` INT, IN `mensaje` TEXT)   BEGIN
+  INSERT INTO chat (id_ticket, id_usuario, mensaje, fecha_envio)
+  VALUES (id_ticket, id_usuario, mensaje, NOW());
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_respuesta` (IN `id_ticket` INT, IN `pregunta_id` INT, IN `calificacion` VARCHAR(255))   BEGIN
@@ -48,11 +48,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_soporte` (IN `id_usuario` 
     VALUES (id_usuario, curp, rfc, numero_seguro_social);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_usuario` (IN `nombre` VARCHAR(100), IN `apellido_paterno` VARCHAR(100), IN `apellido_materno` VARCHAR(100), IN `correo` VARCHAR(100), IN `usuario` VARCHAR(100), IN `contraseña` VARCHAR(100), IN `telefono` CHAR(10), IN `fecha_nacimiento` DATE, IN `rol` ENUM('admin','usuario','soporte'))   BEGIN
-    INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, usuario, contraseña, telefono, fecha_nacimiento, rol)
-    VALUES (nombre, apellido_paterno, apellido_materno, correo, usuario, contraseña, telefono, fecha_nacimiento, rol);
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_chats_por_ticket` (IN `ticket_id` INT)   BEGIN
     SELECT c.id, c.mensaje, c.fecha_envio
     FROM chat c
@@ -60,12 +55,31 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_chats_por_ticket` (IN `tick
     ORDER BY c.fecha_envio;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_estado` (IN `estado_ticket` ENUM('Nuevo','En progreso','Finalizado'))   BEGIN
-    SELECT t.id, t.descripcion, u.usuario AS usuario, s.id_usuario AS soporte_usuario, t.fecha_creacion, t.fecha_cierre
-    FROM ticket t
-    JOIN usuario u ON t.id_usuario = u.id
-    JOIN soporte s ON t.id_soporte = s.id
-    WHERE t.estado = estado_ticket;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_tiempo` (IN `intervalo` ENUM('Mensual','Bimestral','Semestral','Anual'))   BEGIN
+    CASE intervalo
+        WHEN 'Mensual' THEN
+            SELECT DATE_FORMAT(fecha_creacion, '%Y-%m') AS Periodo,
+                   COUNT(*) AS Total_Tickets
+            FROM ticket
+            GROUP BY Periodo;
+        WHEN 'Bimestral' THEN
+            SELECT CONCAT(YEAR(fecha_creacion), '-', LPAD((MONTH(fecha_creacion) + 1) DIV 2, 2, '0')) AS Periodo,
+                   COUNT(*) AS Total_Tickets
+            FROM ticket
+            GROUP BY Periodo;
+        WHEN 'Semestral' THEN
+            SELECT CONCAT(YEAR(fecha_creacion), '-', IF(MONTH(fecha_creacion) <= 6, '01', '02')) AS Periodo,
+                   COUNT(*) AS Total_Tickets
+            FROM ticket
+            GROUP BY Periodo;
+        WHEN 'Anual' THEN
+            SELECT YEAR(fecha_creacion) AS Periodo,
+                   COUNT(*) AS Total_Tickets
+            FROM ticket
+            GROUP BY Periodo;
+        ELSE
+            SELECT 'Intervalo no válido' AS Error;
+    END CASE;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_usuario` (IN `usuario_id` INT)   BEGIN
@@ -78,6 +92,61 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_usuarios_por_rol` (IN `rol_
     SELECT id, usuario, correo
     FROM usuario
     WHERE rol = rol_usuario;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_usuario_por_id` (IN `usuario_id` INT)   BEGIN
+    SELECT * FROM usuario WHERE id = usuario_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `registrar_usuario` (IN `nombre` VARCHAR(100), IN `apellido_paterno` VARCHAR(100), IN `apellido_materno` VARCHAR(100), IN `correo` VARCHAR(100), IN `usuario` VARCHAR(100), IN `contraseña` VARCHAR(100), IN `telefono` CHAR(10), IN `fecha_nacimiento` DATE, IN `rol` ENUM('admin','usuario','soporte'))   BEGIN
+    DECLARE hashed_password VARCHAR(100);
+
+    -- Cifrar la contraseña
+    SET hashed_password = SHA2(contraseña, 256);
+
+    -- Insertar el usuario en la tabla
+    INSERT INTO usuario (
+        nombre, apellido_paterno, apellido_materno, correo, usuario, contraseña, telefono, fecha_nacimiento, rol
+    ) VALUES (
+        nombre, apellido_paterno, apellido_materno, correo, usuario, hashed_password, telefono, fecha_nacimiento, rol
+    );
+END$$
+
+CREATE DEFINER=`` PROCEDURE `tickets_estado` (IN `p_estado` ENUM('Nuevo','En progreso','Finalizado'))   BEGIN
+    IF p_estado = 'Nuevo' THEN
+        SELECT t.id, t.descripcion, t.fecha_creacion, t.estado
+        FROM ticket t
+        WHERE t.estado = p_estado;
+
+    ELSEIF p_estado = 'En progreso' THEN
+        SELECT t.id, t.descripcion, t.fecha_creacion, t.estado, s.nombre AS soporte_nombre
+        FROM ticket t
+        LEFT JOIN soporte s ON t.id_soporte = s.id
+        WHERE t.estado = p_estado;
+
+    ELSEIF p_estado = 'Finalizado' THEN
+        SELECT t.id, t.descripcion, t.fecha_creacion, t.estado, t.fecha_cierre
+        FROM ticket t
+        WHERE t.estado = p_estado;
+    END IF;
+END$$
+
+CREATE DEFINER=`` PROCEDURE `tomar_ticket` (IN `p_id_ticket` INT, IN `p_id_soporte` INT)   BEGIN
+    -- Verificamos que el p_id_soporte no sea NULL
+    IF p_id_soporte IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El id_soporte no puede ser NULL';
+    ELSE
+        -- Verificamos que el ticket esté en estado 'Nuevo' antes de asignar el soporte
+        IF (SELECT estado FROM ticket WHERE id = p_id_ticket) = 'Nuevo' THEN
+            UPDATE ticket
+            SET id_soporte = p_id_soporte, estado = 'En progreso'
+            WHERE id = p_id_ticket;
+        ELSE
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'El ticket ya está asignado y/o finalizado';
+        END IF;
+    END IF;
 END$$
 
 DELIMITER ;
