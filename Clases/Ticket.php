@@ -54,7 +54,6 @@ class Ticket extends Conexion{
             echo "Error: " . $e->getMessage();
         }
     }
-
     /*
     public function obtenerChatsPorTicket($ticket_id) {
         $stmt = $this->conexion->prepare("CALL obtener_chats_por_ticket(?)");
