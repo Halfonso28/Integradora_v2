@@ -14,6 +14,7 @@ class Ticket extends Conexion{
         }
     }
 
+    //estados enum('Nuevo', 'En progreso', 'Finalizado')
     public function obtenerTicketsPorEstado($estado) {
         try {
             $stmt = $this->conexion->prepare("CALL tickets_estado(?)");
