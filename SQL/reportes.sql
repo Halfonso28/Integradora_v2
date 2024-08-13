@@ -179,6 +179,27 @@ CREATE TABLE `pregunta` (
   `pregunta` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `pregunta`
+--
+
+INSERT INTO `pregunta` (`id`, `pregunta`) VALUES
+(1, 'Cómo calificarías la amabilidad del agente?\r\n'),
+(2, '¿El agente comprendió correctamente tu problema?'),
+(3, '¿La explicación proporcionada fue clara?'),
+(4, '¿El tiempo de respuesta fue adecuado?'),
+(5, '¿Cómo calificarías la competencia técnica del agente?'),
+(6, '¿El agente mantuvo una actitud profesional durante la conversación?'),
+(7, '¿Recibiste la ayuda necesaria para resolver tu problema?'),
+(8, '¿El agente te proporcionó información adicional útil?'),
+(9, '¿El agente fue paciente al responder tus preguntas?'),
+(10, '¿El agente fue respetuoso en todo momento?'),
+(11, '¿La solución ofrecida resolvió el problema de forma definitiva?'),
+(12, '¿Cómo calificarías la actitud general del agente durante la asistencia?'),
+(13, '¿El agente se comunicó de manera clara y comprensible?'),
+(14, '¿La solución proporcionada se ajustó a tus expectativas?'),
+(15, '¿Cómo calificarías la habilidad del agente para resolver problemas complejos?');
+
 -- --------------------------------------------------------
 
 --
