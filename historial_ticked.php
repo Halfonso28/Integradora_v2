@@ -65,12 +65,27 @@ $usuario = new Usuario();
                 $tickeds = $ticked->obtenerTicketsPorUsuario($_SESSION["usuario_id"]);
                 foreach ($tickeds as $usuarioTicked) {
                 ?>
-                    <p class="tabla-titulo">Nombre:</p>
-                    <p class="tabla-titulo">Descripcion:</p>
-                    <p class="tabla-titulo">Acciones:</p>
-                    <p class="tabla-p"><?php echo json_decode($_SESSION['usuario']); ?></p>
-                    <p class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></p>
-                    <button class="tabla-btn" disabled><a href="encuesta.php" class="tabla-enlace">Encuesta</a></button>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuario:</th>
+                                <th>Descripcion:</th>
+                                <th>Estado:</th>
+                                <th>Acciones:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tabla-p"><?php echo json_decode($_SESSION['usuario']); ?></td>
+                                <td class="tabla-p td-descripcion"><?php echo $usuarioTicked->descripcion; ?></td>
+                                <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
+                                <td>
+                                    <button class="tabla-btn"><a href="encuesta.php" class="tabla-enlace">Encuesta</a></button>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 <?php
                 }
                 ?>
@@ -81,25 +96,38 @@ $usuario = new Usuario();
         ?>
 
             <main>
-                <?php
-                $tickeds = $ticked->obtenerTicketsPorEstado("Nuevo");
-                foreach ($tickeds as $usuarioTicked) {
-                ?>
-                    <p class="tabla-titulo">Nombre:</p>
-                    <p class="tabla-titulo">Descripcion:</p>
-                    <p class="tabla-titulo">Acciones:</p>
-                    <p class="tabla-p"><?php echo ""; ?></p>
-                    <p class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></p>
-                    <button class="tabla-btn" disabled><a href="encuesta.php" class="tabla-enlace">Encuesta</a></button>
-                <?php
-                }
-                ?>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Usuario:</th>
+                            <th>Descripcion:</th>
+                            <th>Estado:</th>
+                            <th>Acciones:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $tickeds = $ticked->obtenerTicketsPorEstado("Nuevo");
+                        foreach ($tickeds as $usuarioTicked) {
+                        ?>
+                            <tr>
+                                <td class="tabla-p"><?php echo $usuario->obtenerUsuarioPorId($usuarioTicked->id_usuario)->usuario; ?></td>
+                                <td class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></td>
+                                <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
+                                <td class="td-botones">
+                                    <button class="tabla-btn btn btn-primary" ><a href="a_ticked.php?id=" <?php echo $usuarioTicked->id; ?> class="tabla-enlace">Aceptar</a></button>
+                                </td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </main>
     <?php
             break;
     }
     ?>
-
 
 </body>
 

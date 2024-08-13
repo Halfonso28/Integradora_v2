@@ -6,7 +6,7 @@
 :root {
     --a-color: white;
     --bg-nav-enlace: #086ed7;
-    --bg-boton-1:#086ed7;
+    --bg-boton-1: #086ed7;
     --bg-boton-2: #086ed7;
 }
 
@@ -176,27 +176,36 @@ a {
 
 /* Fin estilos Barra de Navegacion */
 
-main{
-    display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
+main {
     background: white;
-    width: 600px;
+    width: 60%;
     margin: auto;
     margin-top: 50px;
     font-family: "Poppins", sans-serif;
     padding: 15px 25px;
-    gap: 20px;
     border-radius: 5px;
 }
-.tabla-titulo{
+
+thead {
+    border-bottom: 3px solid black;
+}
+
+table {
+    width: 100%;
+}
+
+td{
+    vertical-align: middle;
+}
+
+.td-botones {
+    height: 100%;
+    width: auto;
+}
+
+.tabla-titulo {
     font-weight: 600;
     border-bottom: 2px solid black;
     margin: 1px;
 }
-.tabla-btn{
-    width: 100px;
-    height: 50px;
-    border: transparent;
-    border-radius: 5px;
-    background: var(--bg-boton-1);
-}
+

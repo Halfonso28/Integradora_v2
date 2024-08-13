@@ -25,7 +25,7 @@ class Usuario extends Conexion{
         try {
             $stmt = $this->conexion->prepare("CALL obtener_usuario_por_id(?)");
             $stmt->execute([$usuario_id]);
-            return $stmt->fetch(PDO::FETCH_OBJ);
+            return $stmt->fetchObject();
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
