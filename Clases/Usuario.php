@@ -21,6 +21,17 @@ class Usuario extends Conexion{
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public function obtenerUsuarioPorId($usuario_id) {
+        try {
+            $stmt = $this->conexion->prepare("CALL obtener_usuario_por_id(?)");
+            $stmt->execute([$usuario_id]);
+            return $stmt->fetch(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    
+    
     //cambiar estado de usuario ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 }
 
