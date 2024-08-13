@@ -151,6 +151,32 @@ END$$
 
 DELIMITER ;
 
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_descripcion_ticket` (
+    IN `p_id_ticket` INT,
+    IN `p_nueva_descripcion` TEXT
+) 
+BEGIN
+    UPDATE ticket 
+    SET descripcion = CONCAT(descripcion, ' ', p_nueva_descripcion)
+    WHERE id = p_id_ticket;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_ticket_por_id` (IN `p_id_ticket` INT)   
+BEGIN
+    SELECT t.id, t.id_soporte, t.id_usuario, t.descripcion, t.fecha_creacion, t.fecha_cierre, t.estado
+    FROM ticket t
+    WHERE t.id = p_id_ticket;
+END$$
+
+DELIMITER ;
+
+
 -- --------------------------------------------------------
 
 --

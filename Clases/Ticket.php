@@ -40,6 +40,22 @@ class Ticket extends Conexion{
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public function actualizarDescripcionTicket($ticket_id, $nueva_descripcion) {
+        try {
+            $stmt = $this->conexion->prepare("CALL actualizar_descripcion_ticket(?, ?)");
+            $stmt->execute([$ticket_id, $nueva_descripcion]);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    
+    public function obtenerTicketPorId($id_ticket) {
+        $stmt = $this->conexion->prepare("CALL obtener_ticket_por_id(?)");
+        $stmt->execute([$id_ticket]);
+        return $stmt->fetchObject();
+    }
+    
+
     /*
     public function obtenerChatsPorTicket($ticket_id) {
         $stmt = $this->conexion->prepare("CALL obtener_chats_por_ticket(?)");
