@@ -112,7 +112,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `registrar_usuario` (IN `nombre` VAR
     );
 END$$
 
-CREATE DEFINER=`` PROCEDURE `tickets_estado` (IN `p_estado` ENUM('Nuevo','En progreso','Finalizado'))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tickets_estado` (IN `p_estado` ENUM('Nuevo','En progreso','Finalizado'))   BEGIN
     IF p_estado = 'Nuevo' THEN
         SELECT t.id, t.descripcion, t.fecha_creacion, t.estado
         FROM ticket t
@@ -131,7 +131,7 @@ CREATE DEFINER=`` PROCEDURE `tickets_estado` (IN `p_estado` ENUM('Nuevo','En pro
     END IF;
 END$$
 
-CREATE DEFINER=`` PROCEDURE `tomar_ticket` (IN `p_id_ticket` INT, IN `p_id_soporte` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tomar_ticket` (IN `p_id_ticket` INT, IN `p_id_soporte` INT)   BEGIN
     -- Verificamos que el p_id_soporte no sea NULL
     IF p_id_soporte IS NULL THEN
         SIGNAL SQLSTATE '45000'
