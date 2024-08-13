@@ -12,9 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 } else {
     session_start();
-    if ($_SESSION["estadoSesion"] === false) {
+    if (!isset($_SESSION["estadoSesion"]) || $_SESSION["estadoSesion"] === false) {
         header("location:ingresar.php");
-        die();
+        exit();
     }
 }
 
@@ -104,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php
     // if($estadoSesion){
     //     if($_SESSION["rol"]=="admin"){
-    //         include_once("");
     //         echo $_SESSION["usuario"];
     //     }else{
     //         echo "Troste";
