@@ -88,7 +88,7 @@ $usuario = new Usuario();
                     <p class="tabla-titulo">Nombre:</p>
                     <p class="tabla-titulo">Descripcion:</p>
                     <p class="tabla-titulo">Acciones:</p>
-                    <p class="tabla-p"><?php echo json_decode($_SESSION['usuario']); ?></p>
+                    <p class="tabla-p"><?php echo ""; ?></p>
                     <p class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></p>
                     <button class="tabla-btn" disabled><a href="encuesta.php" class="tabla-enlace">Encuesta</a></button>
                 <?php
