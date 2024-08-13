@@ -161,7 +161,11 @@ CREATE TABLE `chat` (
   `id` int(11) NOT NULL,
   `id_ticket` int(11) DEFAULT NULL,
   `mensaje` text DEFAULT NULL,
-  `fecha_envio` datetime DEFAULT current_timestamp()
+  `fecha_envio` datetime DEFAULT current_timestamp(),
+  `nombre_img` varchar(255) DEFAULT NULL,
+  `url_img` varchar(255) DEFAULT NULL,
+  `nombre_documento` varchar(255) DEFAULT NULL,
+  `url_documento` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -199,7 +203,8 @@ CREATE TABLE `soporte` (
   `id_usuario` int(11) DEFAULT NULL,
   `curp` char(18) NOT NULL,
   `rfc` varchar(13) NOT NULL,
-  `numero_seguro_social` char(11) NOT NULL
+  `numero_seguro_social` char(11) NOT NULL,
+  `ine` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
