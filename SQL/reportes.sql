@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `integradora`
+-- Base de datos: `reportes`
 --
 
 DELIMITER $$
@@ -215,7 +215,7 @@ CREATE TABLE `soporte` (
 
 CREATE TABLE `ticket` (
   `id` int(11) NOT NULL,
-  `id_soporte` int(11) NOT NULL,
+  `id_soporte` int(11),
   `id_usuario` int(11) NOT NULL,
   `descripcion` text NOT NULL,
   `fecha_creacion` datetime DEFAULT current_timestamp(),

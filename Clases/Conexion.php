@@ -3,7 +3,7 @@ class Conexion {
     private $host = "localhost";
     private $usuario = "root";
     private $contraseña = "";
-    private $database = "integradora";
+    private $database = "reportes";
     protected $conexion;
 
     public function __construct() {
