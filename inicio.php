@@ -1,23 +1,5 @@
 <?php
-require_once("Clases/Autenticador.php");
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $usuario = $_POST["usuario"];
-    $contraseña = $_POST["contraseña"];
-    $autenticador = new Autenticador();
-    $autenticador->login($usuario, $contraseña);
-    if ($_SESSION["estadoSesion"] === false) {
-        header("location:ingresar.php");
-        die();
-    }
-} else {
-    session_start();
-    if (!isset($_SESSION["estadoSesion"]) || $_SESSION["estadoSesion"] === false) {
-        header("location:ingresar.php");
-        exit();
-    }
-}
-
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="es">

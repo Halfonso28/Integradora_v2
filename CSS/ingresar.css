@@ -99,6 +99,11 @@ a {
     border-bottom: 1px solid black;
     outline: transparent;
 }
+.error{
+    color: red;
+    text-align: center;
+    font-size: 18px;
+}
 .formulario-enlace{
     text-align: center;
     display: block;
