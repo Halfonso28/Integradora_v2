@@ -1,8 +1,10 @@
 <?php
 session_start();
 require_once("Clases/Ticket.php");
+require_once("Clases/Usuario.php");
 
-$ticked=new Ticket();
+$ticked = new Ticket();
+$usuario = new Usuario();
 
 ?>
 
@@ -20,56 +22,84 @@ $ticked=new Ticket();
     <link rel="stylesheet" href="CSS/historial_reporte.css">
     <link rel="stylesheet" href="CSS/fuentes.css">
     <link rel="icon" href="IMG/logo.png" type="image/x-icon">
-    <title>Crear Reportes</title>
+    <title>Historial Reportes</title>
 </head>
-<body>
-    <nav>
-        <!-- <input type="checkbox" id="check-menu">
-        <label for="check-menu"><i class="fa-solid fa-bars"></i></label> -->
-        <div class="contendor-menu">
-            <a href="index.php" class="nombre-pagina">VIAJERO DIGITAL</a>
-            <a href="inicio.php" class="nav-enlace">Inicio</i></a>
-            <div class="contendor-submenu">
-                <a href="#" class="nav-enlace nav-enlace-seleccionado">Reportes <i class="fa-solid fa-caret-down"></i></a>
-                <div class="submenu">
-                    <a href="crear_reporte.php" class="nav-enlace-submenu">Crear</a>
-                    <a href="#" class="nav-enlace-submenu">Historial</a>
-                </div>
-            </div>
-            <div class="contendor-submenu">
-                <a href="#" class="nav-enlace">Chats <i class="fa-solid fa-caret-down"></i></a>
-                <div class="submenu">
-                    <a href="#" class="nav-enlace-submenu">Crear</a>
-                    <a href="#" class="nav-enlace-submenu">Modificar</a>
-                    <a href="#" class="nav-enlace-submenu">Eliminar</a>
-                    <a href="#" class="nav-enlace-submenu">Historial</a>
-                </div>
-            </div>
-            <a href="encuesta.php" class="nav-enlace">Encuesta</a>
-        </div>
-        <div class="div-enlaces">
-            <a href="#" class="nav-enlace nav-enlace-subrayado"><?php echo json_decode($_SESSION["usuario"]); ?></a>
-            <button class="nav-boton">
-                <a href="salir.php" class="nav-boton-a">Salir <i class="fa-solid fa-right-from-bracket"></i></a>
-            </button>
-        </div>
-    </nav>
 
-    <main>
-    <?php 
-        $tickeds=$ticked->obtenerTicketsPorUsuario($_SESSION["usuario_id"]);
-        foreach($tickeds as $usuarioTicked){
-    ?>
-        <p class="tabla-titulo">Nombre:</p>
-        <p class="tabla-titulo">Descripcion:</p>
-        <p class="tabla-titulo">Acciones:</p>
-        <p class="tabla-p"><?php echo json_decode($_SESSION['usuario']); ?></p>
-        <p class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></p>
-        <button class="tabla-btn" disabled><a href="encuesta.php" class="tabla-enlace">Encuesta</a></button>
+<body>
     <?php
-        }
+    switch ($_SESSION["rol"]) {
+        case "usuario":
     ?>
-    </main>
+            <nav>
+                <div class="contendor-menu">
+                    <a href="index.php" class="nombre-pagina">VIAJERO DIGITAL</a>
+                    <a href="inicio.php" class="nav-enlace">Inicio</i></a>
+                    <div class="contendor-submenu">
+                        <a href="#" class="nav-enlace nav-enlace-seleccionado">Reportes <i class="fa-solid fa-caret-down"></i></a>
+                        <div class="submenu">
+                            <a href="crear_reporte.php" class="nav-enlace-submenu">Crear</a>
+                            <a href="#" class="nav-enlace-submenu">Historial</a>
+                        </div>
+                    </div>
+                    <div class="contendor-submenu">
+                        <a href="#" class="nav-enlace">Chats <i class="fa-solid fa-caret-down"></i></a>
+                        <div class="submenu">
+                            <a href="#" class="nav-enlace-submenu">Crear</a>
+                            <a href="#" class="nav-enlace-submenu">Modificar</a>
+                            <a href="#" class="nav-enlace-submenu">Eliminar</a>
+                            <a href="#" class="nav-enlace-submenu">Historial</a>
+                        </div>
+                    </div>
+                    <a href="encuesta.php" class="nav-enlace">Encuesta</a>
+                </div>
+                <div class="div-enlaces">
+                    <a href="#" class="nav-enlace nav-enlace-subrayado"><?php echo json_decode($_SESSION["usuario"]); ?></a>
+                    <button class="nav-boton">
+                        <a href="salir.php" class="nav-boton-a">Salir <i class="fa-solid fa-right-from-bracket"></i></a>
+                    </button>
+                </div>
+            </nav>
+
+            <main>
+                <?php
+                $tickeds = $ticked->obtenerTicketsPorUsuario($_SESSION["usuario_id"]);
+                foreach ($tickeds as $usuarioTicked) {
+                ?>
+                    <p class="tabla-titulo">Nombre:</p>
+                    <p class="tabla-titulo">Descripcion:</p>
+                    <p class="tabla-titulo">Acciones:</p>
+                    <p class="tabla-p"><?php echo json_decode($_SESSION['usuario']); ?></p>
+                    <p class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></p>
+                    <button class="tabla-btn" disabled><a href="encuesta.php" class="tabla-enlace">Encuesta</a></button>
+                <?php
+                }
+                ?>
+            </main>
+        <?php
+            break;
+        case "soporte":
+        ?>
+
+            <main>
+                <?php
+                $tickeds = $ticked->obtenerTicketsPorEstado("Nuevo");
+                foreach ($tickeds as $usuarioTicked) {
+                ?>
+                    <p class="tabla-titulo">Nombre:</p>
+                    <p class="tabla-titulo">Descripcion:</p>
+                    <p class="tabla-titulo">Acciones:</p>
+                    <p class="tabla-p"><?php echo json_decode($_SESSION['usuario']); ?></p>
+                    <p class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></p>
+                    <button class="tabla-btn" disabled><a href="encuesta.php" class="tabla-enlace">Encuesta</a></button>
+                <?php
+                }
+                ?>
+            </main>
+    <?php
+            break;
+    }
+    ?>
+
 
 </body>
 
