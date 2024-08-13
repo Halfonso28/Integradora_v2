@@ -115,7 +115,7 @@ $usuario = new Usuario();
                                 <td class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></td>
                                 <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
                                 <td class="td-botones">
-                                    <button class="tabla-btn btn btn-primary" ><a href="a_ticked.php?id=" <?php echo $usuarioTicked->id; ?> class="tabla-enlace">Aceptar</a></button>
+                                <button class="tabla-btn btn btn-primary" ><a href="a_ticked.php?id=<?php echo $usuarioTicked->id;?>" class="tabla-enlace">Aceptar</a></button>
                                 </td>
                             </tr>
                         <?php

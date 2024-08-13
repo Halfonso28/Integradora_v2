@@ -16,9 +16,10 @@ class Soporte extends Conexion{
             $sql = "CALL tomar_ticket($idSoporte, $idTicket)";
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();
-            echo "Ticket asignado correctamente.";
+            return true;
         } catch (PDOException $e) {
             echo "Error al asignar el ticket: " . $e->getMessage();
+            return false;
         }
     }
 }

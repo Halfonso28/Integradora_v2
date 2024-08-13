@@ -2,12 +2,19 @@
 session_start();
 require_once("Clases/Ticket.php");
 require_once("Clases/Usuario.php");
+require_once("Clases/Soporte.php");
 
 $ticked = new Ticket();
 $usuario = new Usuario();
+$soporte = new Soporte();
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $id = $_GET["id"];
+    echo $id;
 }
+
+$soporte->tomarTicket(1,$id);
+
 
 ?>
 
@@ -29,8 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 </head>
 
 <body>
+    <main>
+        <?php
+        $tickedUsuario = $ticked->obtenerTicketPorId($id);
+        ?>
+        <p class="tabla-p">Usuario: <?php echo $usuario->obtenerUsuarioPorId($tickedUsuario->id_usuario)->usuario; ?></p>
+        <p class="tabla-p">Descripcion: <?php echo $tickedUsuario->descripcion; ?></p>
+        <form action="">
+           <input type="text">
+        </form>
+    </main>
 
-    
 
 </body>
 
