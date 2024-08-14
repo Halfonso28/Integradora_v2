@@ -10,10 +10,9 @@ $soporte = new Soporte();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $id = $_GET["id"];
-    $_SESSION["id_ticked"]=$id;
 }
 
-$soporte->tomarTicket(1,$id);
+$soporte->tomarTicket($_SESSION["usuario_id"],$id);
 
 
 ?>
