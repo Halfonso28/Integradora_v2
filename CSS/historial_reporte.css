@@ -185,6 +185,9 @@ main {
     padding: 15px 25px;
     border-radius: 5px;
 }
+main table{
+    padding-bottom: 100px;
+}
 
 thead {
     border-bottom: 3px solid black;

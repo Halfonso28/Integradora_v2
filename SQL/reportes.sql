@@ -131,23 +131,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tickets_estado` (IN `p_estado` ENUM
     END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tomar_ticket` (IN `p_id_ticket` INT, IN `p_id_soporte` INT)   BEGIN
-    -- Verificamos que el p_id_soporte no sea NULL
-    IF p_id_soporte IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El id_soporte no puede ser NULL';
-    ELSE
-        -- Verificamos que el ticket esté en estado 'Nuevo' antes de asignar el soporte
-        IF (SELECT estado FROM ticket WHERE id = p_id_ticket) = 'Nuevo' THEN
-            UPDATE ticket
-            SET id_soporte = p_id_soporte, estado = 'En progreso'
-            WHERE id = p_id_ticket;
-        ELSE
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'El ticket ya está asignado y/o finalizado';
-        END IF;
-    END IF;
-END$$
+DELIMITER $$
+
+CREATE PROCEDURE tomar_ticket(
+    IN n_id_ticket INT,
+    IN n_id_soporte INT
+)
+BEGIN
+    UPDATE ticket
+    SET id_soporte = n_id_soporte, estado = 'En progreso'
+    WHERE id = n_id_ticket;
+END $$
+
+DELIMITER ;
+
 
 DELIMITER ;
 

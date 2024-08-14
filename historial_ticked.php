@@ -90,13 +90,16 @@ $usuario = new Usuario();
                 }
                 ?>
             </main>
+
+
+            
         <?php
             break;
         case "soporte":
         ?>
 
             <main>
-                <table class="table table-striped">
+                <table class="table table-striped mb-5">
                     <thead>
                         <tr>
                             <th>Usuario:</th>
@@ -117,6 +120,30 @@ $usuario = new Usuario();
                                 <td class="td-botones">
                                 <button class="tabla-btn btn btn-primary" ><a href="a_ticked.php?id=<?php echo $usuarioTicked->id;?>" class="tabla-enlace">Aceptar</a></button>
                                 </td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped mt-5">
+                    <thead>
+                        <tr>
+                            <th>Usuario:</th>
+                            <th>Descripcion:</th>
+                            <th>Estado:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $tickeds = $ticked->obtenerTicketsPorEstado("Finalizado");
+                        foreach ($tickeds as $usuarioTicked) {
+                        ?>
+                            <tr>
+                                <td class="tabla-p"><?php echo $usuario->obtenerUsuarioPorId($usuarioTicked->id_usuario)->usuario; ?></td>
+                                <td class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></td>
+                                <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
                             </tr>
                         <?php
                         }

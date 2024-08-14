@@ -10,7 +10,7 @@ $soporte = new Soporte();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $id = $_GET["id"];
-    echo $id;
+    $_SESSION["id_ticked"]=$id;
 }
 
 $soporte->tomarTicket(1,$id);
@@ -42,8 +42,9 @@ $soporte->tomarTicket(1,$id);
         ?>
         <p class="tabla-p">Usuario: <?php echo $usuario->obtenerUsuarioPorId($tickedUsuario->id_usuario)->usuario; ?></p>
         <p class="tabla-p">Descripcion: <?php echo $tickedUsuario->descripcion; ?></p>
-        <form action="">
-           <input type="text">
+        <form action="respuesta.php" method="post">
+           <input type="text" name="respuesta">
+           <button class="btn btn-danger" type="submit">Enviar</button>
         </form>
     </main>
 
