@@ -72,7 +72,7 @@ session_start();
                     <img src="IMG/persona-hablando.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">Dale seguimiento a tus reportes hablando con nuestros especialistas.</strong>
                     <p class="seccion-parrafo">Comunicate de forma interactiva para solucionar tu problema.</p>
-                    <button class="seccion-boton"><a href="grafica.html" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
+                    <button class="seccion-boton"><a href="historial_ticked.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
                 <!-- Grupo Encuesta -->
                 <div class="col-md-4 col-sm-12 seccion-grupo">
