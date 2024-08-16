@@ -7,77 +7,50 @@ $conexion = $conexionObj->getConexion();
 ?>
 
 <html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart);
 
-<head>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
-    google.charts.load('current', {
-      'packages': ['bar']
-    });
-    google.charts.setOnLoadCallback(drawChart);
-    google.charts.setOnLoadCallback(drawChart2);
-
-    function drawChart() {
-      var data = google.visualization.arrayToDataTable([
-        ['Pregunta 1', 'Calificación', ],
-        <?php
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Pregunta', 'Promedio'],
+<?php
         // Consulta SQL usando PDO
-        $SQL = "SELECT * FROM `respuestas` WHERE pregunta_id = 1;";
+        $SQL = "SELECT 
+    pregunta_id, 
+    AVG(CAST(calificacion AS DECIMAL(10,2))) AS promedio_calificacion
+FROM 
+    respuestas
+GROUP BY 
+    pregunta_id;";
         $stmt = $conexion->query($SQL);
-
+        
         // Recorrer los resultados
         while ($resultado = $stmt->fetch(PDO::FETCH_ASSOC)) {
-          // Generar las filas para el gráfico
-          echo "['" . $resultado['id'] . "', " . $resultado['calificacion'] . "],";
+            // Asignar el nombre de la pregunta basado en el id de la pregunta
+            $pregunta = 'Pregunta ' . $resultado['pregunta_id'];
+            // Generar las filas para el gráfico
+            echo "['".$pregunta."', ".$resultado['promedio_calificacion']."],";
         }
-        ?>
-      ]);
+?>
+        ]);
 
-      var options = {
-        chart: {
-          title: 'Respuestas Pregunta 1',
-          subtitle: 'Excelente = 4 , Bien = 3, Regular = 2, Mal = 1 arguments',
-        }
-      };
+        var options = {
+          chart: {
+            title: 'Respuestas por Pregunta',
+            subtitle: 'Excelente = 4 , Bien = 3, Regular = 2, Mal = 1',
+          }
+        };
 
-      var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
 
-      chart.draw(data, google.charts.Bar.convertOptions(options));
-    }
-
-    function drawChart2() {
-      var data = google.visualization.arrayToDataTable([
-        ['Pregunta 2', 'Calificación', ],
-        <?php
-        // Consulta SQL usando PDO
-        $SQL = "SELECT * FROM `respuestas` WHERE pregunta_id = 2;";
-        $stmt = $conexion->query($SQL);
-
-        // Recorrer los resultados
-        while ($resultado = $stmt->fetch(PDO::FETCH_ASSOC)) {
-          // Generar las filas para el gráfico
-          echo "['" . $resultado['id'] . "', " . $resultado['calificacion'] . "],";
-        }
-        ?>
-      ]);
-
-      var options = {
-        chart: {
-          title: 'Respuestas Pregunta 2',
-          subtitle: 'Excelente = 4 , Bien = 3, Regular = 2, Mal = 1 arguments',
-        }
-      };
-
-      var chart = new google.charts.Bar(document.getElementById('columnchart_material2'));
-
-      chart.draw(data, google.charts.Bar.convertOptions(options));
-    }
-  </script>
-</head>
-
-<body>
-  <div id="columnchart_material" style="width: 500px; height: 300px;"></div>
-  <div id="columnchart_material2" style="width: 500px; height: 300px;"></div>
-</body>
-
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
+    </script>
+  </head>
+  <body>
+    <div id="columnchart_material" style="width: 100%px; height: 100%;"></div>
+  </body>
 </html>

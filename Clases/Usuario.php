@@ -28,6 +28,7 @@ class Usuario extends Conexion{
             return $stmt->fetchObject();
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
+            return [];
         }
     }
     

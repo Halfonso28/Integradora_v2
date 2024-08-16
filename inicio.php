@@ -75,11 +75,9 @@ session_start();
                         <p class="nav-enlace">Reportes <i class="fa-solid fa-caret-down"></i></p>
                         <div class="submenu">
                             <a href="historial_ticked.php" class="nav-enlace-submenu">Historial</a>
-                            <!-- <a href="./reporte_teresa/gradica.php" class="nav-enlace-submenu">Historial</a> -->
                         </div>
                     </div>
-
-                    <a href="encuesta.php" class="nav-enlace">Encuesta</a>
+                    <a href="grafica.php" class="nav-enlace">Graficas</a>
                 </div>
                 <div class="div-enlaces">
                     <a href="#" class="nav-enlace nav-enlace-subrayado"><?php echo json_decode($_SESSION["usuario"]); ?></a>

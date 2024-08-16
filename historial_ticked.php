@@ -94,7 +94,6 @@ $usuario = new Usuario();
             break;
         case "soporte":
         ?>
-
             <main>
                 <!-- Formulario para seleccionar el estado -->
                 <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -103,14 +102,26 @@ $usuario = new Usuario();
                         <option value="En progreso" <?php if (isset($_POST['estado']) && $_POST['estado'] == 'En progreso') echo 'selected'; ?>>En progreso</option>
                         <option value="Finalizado" <?php if (isset($_POST['estado']) && $_POST['estado'] == 'Finalizado') echo 'selected'; ?>>Finalizado</option>
                     </select>
+                    <input type="date" name="fecha_inicio" value="<?php echo isset($_POST['fecha_inicio']) ? $_POST['fecha_inicio'] : ''; ?>" placeholder="Fecha inicio">
+                    <input type="date" name="fecha_fin" value="<?php echo isset($_POST['fecha_fin']) ? $_POST['fecha_fin'] : ''; ?>" placeholder="Fecha fin">
+                    <button type="submit">Filtrar</button>
                 </form>
+
 
                 <?php
                 // Obtener el estado seleccionado o por defecto "Nuevo"
                 $estadoSeleccionado = isset($_POST['estado']) && $_POST['estado'] !== '' ? $_POST['estado'] : 'Nuevo';
+                $fechaInicio = isset($_POST['fecha_inicio']) && !empty($_POST['fecha_inicio']) ? $_POST['fecha_inicio'] : null;
+                $fechaFin = isset($_POST['fecha_fin']) && !empty($_POST['fecha_fin']) ? $_POST['fecha_fin'] : null;
 
-                // Obtener los tickets según el estado seleccionado
-                $tickeds = $ticked->obtenerTicketsPorEstado($estadoSeleccionado);
+                // Lógica para obtener los tickets filtrados por estado y rango de fechas
+                if ($fechaInicio && $fechaFin) {
+                    $tickeds = $ticked->obtenerTicketsPorFecha($fechaInicio, $fechaFin);
+                } elseif ($fechaInicio) {
+                    $tickeds = $ticked->obtenerTicketsPorFecha($fechaInicio, $fechaInicio);
+                } else {
+                    $tickeds = $ticked->obtenerTicketsPorEstado($estadoSeleccionado);
+                }
 
                 // Si hay tickets, muestra la tabla
                 if (!empty($tickeds)) {
@@ -121,18 +132,30 @@ $usuario = new Usuario();
                                 <th>Usuario:</th>
                                 <th>Descripcion:</th>
                                 <th>Estado:</th>
+                                <th>Fecha Creación:</th>
+                                <th>Fecha Fin:</th>
                                 <th>Acciones:</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($tickeds as $usuarioTicked): ?>
+                            <?php foreach ($tickeds as $usuarioTicket): ?>
                                 <tr>
-                                    <td class="tabla-p"><?php echo $usuario->obtenerUsuarioPorId($usuarioTicked->id_usuario)->usuario; ?></td>
-                                    <td class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></td>
-                                    <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
+                                    <td class="tabla-p">
+                                        <?php
+                                        $usuarioObjeto = $usuario->obtenerUsuarioPorId($usuarioTicket->id_usuario);
+                                        echo $usuarioObjeto ? $usuarioObjeto->usuario : "Usuario no disponible";
+                                        ?>
+                                    </td>
+                                    <td class="tabla-p"><?php echo $usuarioTicket->descripcion; ?></td>
+                                    <td class="tabla-p"><?php echo $usuarioTicket->estado; ?></td>
+                                    <td class="tabla-p"><?php echo date('Y-m-d', strtotime($usuarioTicket->fecha_creacion)); ?></td>
+                                    <td class="tabla-p"><?php echo date('Y-m-d', strtotime($usuarioTicket->fecha_cierre)); ?></td>
                                     <td class="td-botones">
                                         <button class="tabla-btn btn btn-primary">
-                                            <a href="a_ticked.php?id=<?php echo $usuarioTicked->id; ?>" class="tabla-enlace">Aceptar</a>
+                                            <a href="respuesta_ticket.php?ticket_id=<?php echo $usuarioTicket->id; ?>" class="tabla-enlace">Responder</a>
+                                        </button>
+                                        <button class="tabla-btn btn btn-danger">
+                                            <a href="a_finalizar_ticket.php?ticket_id=<?php echo $usuarioTicket->id; ?>" class="tabla-enlace">Finalizar</a>
                                         </button>
                                     </td>
                                 </tr>

@@ -4,13 +4,13 @@
   require_once("Clases/Usuario.php");
   require_once("Clases/Soporte.php");
   
-  $ticked = new Ticket();
+  $ticket = new Ticket();
   $usuario = new Usuario();
   $soporte = new Soporte();
 
   $respuesta=$_POST["respuesta"];
-
-  $ticked->actualizarDescripcionTicket($ticked->obtenerTicketPorId($_SESSION["id_ticked"])->id,"<br><br>Respuesta: ".$respuesta);
-  $ticked->ticketEnprogreso($_SESSION["id_ticked"]);
+  $ticket_id=$_GET["ticket_id"];
+  $ticket->actualizarDescripcionTicket($ticket_id,"<p class='respuesta'>Respuesta: ".$respuesta."</p>");
+  $ticket->actualizarEstadoTicket($ticket_id,"En progreso");
   header("location:historial_ticked.php")
 ?>
