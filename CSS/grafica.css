@@ -1,9 +1,172 @@
-.div-graficas{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 100%;
+* {
+    box-sizing: border-box;
 }
-.grafica{
+
+/* Propiedades/Variables Personalizadas */
+:root {
+    --a-color: black;
+    --bg-nav-enlace: #086ed7;
+    --bg-boton-1: #086ed7;
+    --bg-boton-2: #086ed7;
+}
+
+body {
+    background: #66b3e3;
+}
+
+/* Estilos Barra de Navegacion */
+nav {
+    display: flex;
     width: 100%;
-    height: 500px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 75px;
+    font-family: "Poppins", sans-serif;
+    background: white;
+}
+
+a {
+    text-decoration: none;
+    color: var(--a-color);
+    font-weight: 400;
+}
+
+.nav-boton {
+    background-color: var(--bg-boton-2);
+    border: 0;
+    border-radius: 5px;
+    margin: 0px 8px;
+}
+
+.nav-boton-a {
+    color: white;
+    display: block;
+    padding: 8px 14px;
+}
+
+.contendor-menu {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: 70px;
+    /* margin-left: -20%; */
+}
+
+.nombre-pagina {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-right: 35px;
+}
+
+.nav-enlace {
+    margin: 0px 10px;
+    letter-spacing: 1px;
+    font-size: 18px;
+    padding: 5px 10px;
+    font-weight: 500;
+    font-family: "Lato", sans-serif;
+    transition: all 300ms ease;
+    display: block;
+    border-radius: 3px;
+    user-select: none;
+}
+
+.nav-enlace:hover {
+    transform: scale(1.1);
+    background-color: var(--bg-nav-enlace);
+    color: white;
+    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.nav-enlace-subrayado {
+    border-bottom: 1px solid var(--a-color);
+    border-radius: 0;
+    height: 28px;
+    padding: 0;
+    margin-top: 6px;
+}
+
+.nav-enlace-subrayado:hover {
+    background: transparent;
+    color: var(--a-color);
+    transform: none;
+    box-shadow: none;
+    font-weight: 600;
+    border-bottom: 2px solid var(--a-color);
+}
+
+.div-enlaces {
+    margin: 0px 20px;
+    display: flex;
+}
+
+.nav-enlace-seleccionado {
+    transform: scale(1.1);
+    background-color: var(--bg-nav-enlace);
+    color: white;
+    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.contendor-submenu {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.submenu {
+    position: absolute;
+    top: 40px;
+    background-color: white;
+    padding: 10px 0;
+    width: 150px;
+    visibility: hidden;
+    transition: all 300ms ease-in;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
+    font-family: "Lato", sans-serif;
+}
+
+.submenu:before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid white;
+    position: absolute;
+    top: -12px;
+    left: 20px;
+}
+
+.contendor-submenu:hover .submenu {
+    visibility: visible;
+    top: 45px;
+}
+
+.nav-enlace-submenu {
+    display: block;
+    font-size: 18px;
+    padding: 5px 15px;
+    transition: all 300ms ease;
+    border-radius: 5px;
+    color: black;
+}
+
+.nav-enlace-submenu:hover {
+    padding-left: 10px;
+    background-color: var(--bg-nav-enlace);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Fin estilos Barra de Navegacion */
+
+.grafica{
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    margin-top: 50px;
+    border: 10px solid white;
 }

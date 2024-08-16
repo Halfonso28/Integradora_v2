@@ -4,7 +4,7 @@
 
 /* Propiedades/Variables Personalizadas */
 :root {
-    --a-color: white;
+    --a-color: black;
     --bg-nav-enlace: #086ed7;
     --bg-boton-1: #086ed7;
     --bg-boton-2: #086ed7;
@@ -23,6 +23,7 @@ nav {
     padding: 10px;
     height: 75px;
     font-family: "Poppins", sans-serif;
+    background: white;
 }
 
 a {
@@ -69,14 +70,6 @@ a {
     transition: all 300ms ease;
     display: block;
     border-radius: 3px;
-    -youbkit-touch-callout: none;
-    /*iOS Safari*/
-    -youbkit-user-select: none;
-    /* Chrome 6.0+, Safari 3.1+, Edge y Opera 15+ */
-    -moz-user-select: none;
-    /*Firefox*/
-    -ms-user-select: none;
-    /* IE 10+ y Edge */
     user-select: none;
 }
 
@@ -84,8 +77,6 @@ a {
     transform: scale(1.1);
     background-color: var(--bg-nav-enlace);
     color: white;
-    -webkit-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
     box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
@@ -115,8 +106,6 @@ a {
     transform: scale(1.1);
     background-color: var(--bg-nav-enlace);
     color: white;
-    -webkit-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
     box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
@@ -135,8 +124,6 @@ a {
     visibility: hidden;
     transition: all 300ms ease-in;
     border-radius: 5px;
-    -webkit-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
     box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
     font-family: "Lato", sans-serif;
 }
@@ -212,3 +199,6 @@ td{
     margin: 1px;
 }
 
+.tabla-enlace{
+    color: white;
+}

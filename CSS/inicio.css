@@ -165,10 +165,11 @@ a {
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+    margin-bottom: 50px;
 }
 
 .seccion-grupo {
-    width: 40%;
+    width: 35%;
     font-family: "Poppins", sans-serif;
     display: block;
     background-color: white;
@@ -189,6 +190,12 @@ a {
 .seccion-parrafo {
     display: block;
     margin: 10px 20px;
+    font-size: 18px;
+    text-align: justify;
+}
+
+strong.seccion-parrafo{
+    font-size: 20px;
 }
 
 .seccion-boton {
@@ -295,4 +302,5 @@ a {
         width: 100%;
         max-width: 100%;
     }
+
 }

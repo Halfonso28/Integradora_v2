@@ -35,7 +35,7 @@ session_start();
                             <a href="historial_ticked.php" class="nav-enlace-submenu">Historial</a>
                         </div>
                     </div>
-                    <a href="encuesta.php" class="nav-enlace">Encuesta</a>
+                    <a href="historial_ticked.php" class="nav-enlace">Encuesta</a>
                 </div>
                 <div class="div-enlaces">
                     <a href="#" class="nav-enlace nav-enlace-subrayado"><?php echo json_decode($_SESSION["usuario"]); ?></a>
@@ -93,15 +93,15 @@ session_start();
                     <img src="IMG/persona-laptop.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">Reportes</strong>
                     <p class="seccion-parrafo">Accede a los reportes recientes relacionados con los viajes. Aquí podrás revisar en detalle todos los informes generados para los viajes realizados, que incluyen cualquier incidencia, comentario o sugerencia presentada por los usuarios.</p>
-                    <button class="seccion-boton"><a href="crear_reporte.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
+                    <button class="seccion-boton"><a href="historial_ticked.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
                 
                 <!-- Grupo Encuesta -->
                 <div class="col-md-4 col-sm-12 seccion-grupo">
                     <img src="IMG/encuesta.jpg" alt="" class="seccion-imagen">
-                    <strong class="seccion-parrafo">Satisfacción del cliente</strong>
-                    <p class="seccion-parrafo">Completa un pequeña encuesta donde nos digas como fue el servicio de resolución de problemas.</p>
-                    <button class="seccion-boton"><a href="encuesta.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
+                    <strong class="seccion-parrafo">Graficas</strong>
+                    <p class="seccion-parrafo">Accede a un análisis detallado de las calificaciones proporcionadas por los usuarios en sus reportes de viajes. Esta funcionalidad te permite observar cómo los usuarios valoran su experiencia. </p>
+                    <button class="seccion-boton"><a href="grafica.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
             </section>
     <?php

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-08-2024 a las 00:45:51
+-- Tiempo de generación: 16-08-2024 a las 14:33:10
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -25,6 +25,20 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_descripcion_ticket` (IN `p_id_ticket` INT, IN `p_nueva_descripcion` TEXT)   BEGIN
+    -- Actualiza la descripción del ticket concatenando la nueva descripción
+    UPDATE ticket 
+    SET descripcion = CONCAT(descripcion, p_nueva_descripcion)
+    WHERE id = p_id_ticket;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_estado_ticket` (IN `id_ticket` INT, IN `nuevo_estado` ENUM("Nuevo","En progreso","Finalizado"))   BEGIN
+    -- Actualiza la descripción del ticket concatenando la nueva descripción
+    UPDATE ticket 
+    SET estado = nuevo_estado
+    WHERE id = id_ticket;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_estado_usuario` (IN `usuario_id` INT, IN `nuevo_estado` TINYINT)   BEGIN
     UPDATE usuario SET estado = nuevo_estado WHERE id = usuario_id;
 END$$
@@ -38,21 +52,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_mensaje_chat` (IN `id_tick
   VALUES (id_ticket, id_usuario, mensaje, NOW());
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_respuesta` (IN `id_ticket` INT, IN `pregunta_id` INT, IN `calificacion` VARCHAR(255))   BEGIN
-    INSERT INTO respuestas (id_ticket, pregunta_id, calificacion)
-    VALUES (id_ticket, pregunta_id, calificacion);
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_soporte` (IN `id_usuario` INT, IN `curp` CHAR(18), IN `rfc` VARCHAR(13), IN `numero_seguro_social` CHAR(11))   BEGIN
     INSERT INTO soporte (id_usuario, curp, rfc, numero_seguro_social)
     VALUES (id_usuario, curp, rfc, numero_seguro_social);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_chats_por_ticket` (IN `ticket_id` INT)   BEGIN
-    SELECT c.id, c.mensaje, c.fecha_envio
-    FROM chat c
-    WHERE c.id_ticket = ticket_id
-    ORDER BY c.fecha_envio;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_estado` (IN `p_estado` ENUM('Nuevo','En progreso','Finalizado'))   BEGIN
+    IF p_estado = 'Nuevo' THEN
+        SELECT * FROM ticket t
+        WHERE t.estado = p_estado;
+
+    ELSEIF p_estado = 'En progreso' THEN
+        SELECT * FROM ticket t
+        WHERE t.estado = p_estado;
+
+    ELSEIF p_estado = 'Finalizado' THEN
+        SELECT * FROM ticket t
+        WHERE t.estado = p_estado;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_fecha` (IN `p_fecha_inicio` DATE, IN `p_fecha_fin` DATE)   BEGIN
+    SELECT * FROM ticket
+    WHERE DATE(fecha_creacion) BETWEEN p_fecha_inicio AND p_fecha_fin;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_tiempo` (IN `intervalo` ENUM('Mensual','Bimestral','Semestral','Anual'))   BEGIN
@@ -83,9 +105,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_tiempo` (IN `in
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_tickets_por_usuario` (IN `usuario_id` INT)   BEGIN
-    SELECT t.id, t.descripcion, t.estado, t.fecha_creacion, t.fecha_cierre
+    SELECT t.id, t.id_usuario, t.descripcion, t.estado, t.fecha_creacion, t.fecha_cierre, t.id_encuesta
     FROM ticket t
     WHERE t.id_usuario = usuario_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_ticket_por_id` (IN `p_id_ticket` INT)   BEGIN
+    SELECT t.id, t.id_soporte, t.id_usuario, t.descripcion, t.fecha_creacion, t.fecha_cierre, t.estado
+    FROM ticket t
+    WHERE t.id = p_id_ticket;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_usuarios_por_rol` (IN `rol_usuario` ENUM('admin','usuario','soporte'))   BEGIN
@@ -112,84 +140,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `registrar_usuario` (IN `nombre` VAR
     );
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tickets_estado` (IN `p_estado` ENUM('Nuevo','En progreso','Finalizado'))   BEGIN
-    IF p_estado = 'Nuevo' THEN
-        SELECT t.id, t.descripcion, t.fecha_creacion, t.estado
-        FROM ticket t
-        WHERE t.estado = p_estado;
-
-    ELSEIF p_estado = 'En progreso' THEN
-        SELECT t.id, t.descripcion, t.fecha_creacion, t.estado, s.nombre AS soporte_nombre
-        FROM ticket t
-        LEFT JOIN soporte s ON t.id_soporte = s.id
-        WHERE t.estado = p_estado;
-
-    ELSEIF p_estado = 'Finalizado' THEN
-        SELECT t.id, t.descripcion, t.fecha_creacion, t.estado, t.fecha_cierre
-        FROM ticket t
-        WHERE t.estado = p_estado;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tomar_ticket` (IN `p_id_ticket` INT, IN `p_id_soporte` INT)   BEGIN
+    -- Verificamos que el p_id_soporte no sea NULL
+    IF p_id_soporte IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El id_soporte no puede ser NULL';
+    ELSE
+        -- Verificamos que el ticket esté en estado 'Nuevo' antes de asignar el soporte
+        IF (SELECT estado FROM ticket WHERE id = p_id_ticket) = 'Nuevo' THEN
+            UPDATE ticket
+            SET id_soporte = p_id_soporte, estado = 'En progreso'
+            WHERE id = p_id_ticket;
+        ELSE
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'El ticket ya está asignado y/o finalizado';
+        END IF;
     END IF;
 END$$
 
-DELIMITER $$
-
-CREATE PROCEDURE tomar_ticket(
-    IN n_id_ticket INT,
-    IN n_id_soporte INT
-)
-BEGIN
-    UPDATE ticket
-    SET id_soporte = n_id_soporte, estado = 'En progreso'
-    WHERE id = n_id_ticket;
-END $$
-
 DELIMITER ;
-
-
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_descripcion_ticket` (
-    IN `p_id_ticket` INT,
-    IN `p_nueva_descripcion` TEXT
-) 
-BEGIN
-    UPDATE ticket 
-    SET descripcion = CONCAT(descripcion, ' ', p_nueva_descripcion)
-    WHERE id = p_id_ticket;
-END$$
-
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_ticket_por_id` (IN `p_id_ticket` INT)   
-BEGIN
-    SELECT t.id, t.id_soporte, t.id_usuario, t.descripcion, t.fecha_creacion, t.fecha_cierre, t.estado
-    FROM ticket t
-    WHERE t.id = p_id_ticket;
-END$$
-
-DELIMITER ;
-
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `chat`
---
-
-CREATE TABLE `chat` (
-  `id` int(11) NOT NULL,
-  `id_ticket` int(11) DEFAULT NULL,
-  `mensaje` text DEFAULT NULL,
-  `fecha_envio` datetime DEFAULT current_timestamp(),
-  `nombre_img` varchar(255) DEFAULT NULL,
-  `url_img` varchar(255) DEFAULT NULL,
-  `nombre_documento` varchar(255) DEFAULT NULL,
-  `url_documento` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -236,7 +205,11 @@ CREATE TABLE `respuestas` (
   `calificacion` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `respuestas`
+--
+
+
 
 --
 -- Estructura de tabla para la tabla `soporte`
@@ -251,6 +224,11 @@ CREATE TABLE `soporte` (
   `ine` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `soporte`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -259,7 +237,7 @@ CREATE TABLE `soporte` (
 
 CREATE TABLE `ticket` (
   `id` int(11) NOT NULL,
-  `id_soporte` int(11),
+  `id_soporte` int(11) DEFAULT NULL,
   `id_usuario` int(11) NOT NULL,
   `descripcion` text NOT NULL,
   `fecha_creacion` datetime DEFAULT current_timestamp(),
@@ -267,6 +245,7 @@ CREATE TABLE `ticket` (
   `estado` enum('Nuevo','En progreso','Finalizado') DEFAULT 'Nuevo',
   `id_encuesta` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- --------------------------------------------------------
 
@@ -288,19 +267,10 @@ CREATE TABLE `usuario` (
   `rol` enum('admin','usuario','soporte') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `usuario`
+--
 
---
--- Estructura Stand-in para la vista `view_chats_por_ticket`
--- (Véase abajo para la vista actual)
---
-CREATE TABLE `view_chats_por_ticket` (
-`chat_id` int(11)
-,`id_ticket` int(11)
-,`descripcion_ticket` text
-,`mensaje` text
-,`fecha_envio` datetime
-);
 
 -- --------------------------------------------------------
 
@@ -394,15 +364,6 @@ CREATE TABLE `view_usuarios_activos` (
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `view_chats_por_ticket`
---
-DROP TABLE IF EXISTS `view_chats_por_ticket`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_chats_por_ticket`  AS SELECT `c`.`id` AS `chat_id`, `c`.`id_ticket` AS `id_ticket`, `t`.`descripcion` AS `descripcion_ticket`, `c`.`mensaje` AS `mensaje`, `c`.`fecha_envio` AS `fecha_envio` FROM (`chat` `c` join `ticket` `t` on(`c`.`id_ticket` = `t`.`id`)) ;
-
--- --------------------------------------------------------
-
---
 -- Estructura para la vista `view_respuestas_por_ticket`
 --
 DROP TABLE IF EXISTS `view_respuestas_por_ticket`;
@@ -459,13 +420,6 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 
 --
--- Indices de la tabla `chat`
---
-ALTER TABLE `chat`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_ticket` (`id_ticket`);
-
---
 -- Indices de la tabla `pregunta`
 --
 ALTER TABLE `pregunta`
@@ -508,50 +462,38 @@ ALTER TABLE `usuario`
 --
 
 --
--- AUTO_INCREMENT de la tabla `chat`
---
-ALTER TABLE `chat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `pregunta`
 --
 ALTER TABLE `pregunta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `respuestas`
 --
 ALTER TABLE `respuestas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `soporte`
 --
 ALTER TABLE `soporte`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `ticket`
 --
 ALTER TABLE `ticket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `chat`
---
-ALTER TABLE `chat`
-  ADD CONSTRAINT `chat_ibfk_1` FOREIGN KEY (`id_ticket`) REFERENCES `ticket` (`id`);
 
 --
 -- Filtros para la tabla `respuestas`

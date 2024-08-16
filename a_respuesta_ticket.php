@@ -10,7 +10,7 @@
 
   $respuesta=$_POST["respuesta"];
   $ticket_id=$_GET["ticket_id"];
-  $ticket->actualizarDescripcionTicket($ticket_id,"<p class='respuesta'>Respuesta: ".$respuesta."</p>");
+  $ticket->actualizarDescripcionTicket($ticket_id,"<br>Respuesta: ".$respuesta);
   $ticket->actualizarEstadoTicket($ticket_id,"En progreso");
   header("location:historial_ticked.php")
 ?>

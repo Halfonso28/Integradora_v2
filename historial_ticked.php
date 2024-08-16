@@ -41,16 +41,7 @@ $usuario = new Usuario();
                             <a href="#" class="nav-enlace-submenu">Historial</a>
                         </div>
                     </div>
-                    <div class="contendor-submenu">
-                        <a href="#" class="nav-enlace">Chats <i class="fa-solid fa-caret-down"></i></a>
-                        <div class="submenu">
-                            <a href="#" class="nav-enlace-submenu">Crear</a>
-                            <a href="#" class="nav-enlace-submenu">Modificar</a>
-                            <a href="#" class="nav-enlace-submenu">Eliminar</a>
-                            <a href="#" class="nav-enlace-submenu">Historial</a>
-                        </div>
-                    </div>
-                    <a href="encuesta.php" class="nav-enlace">Encuesta</a>
+                    <a href="#" class="nav-enlace">Encuesta</a>
                 </div>
                 <div class="div-enlaces">
                     <a href="#" class="nav-enlace nav-enlace-subrayado"><?php echo json_decode($_SESSION["usuario"]); ?></a>
@@ -72,6 +63,7 @@ $usuario = new Usuario();
                     </thead>
                     <tbody>
                         <?php
+
                         $tickeds = $ticked->obtenerTicketsPorUsuario($_SESSION["usuario_id"]);
                         foreach ($tickeds as $usuarioTicked) {
                         ?>
@@ -80,7 +72,13 @@ $usuario = new Usuario();
                                 <td class="tabla-p td-descripcion"><?php echo $usuarioTicked->descripcion; ?></td>
                                 <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
                                 <td>
-                                    <button class="btn btn-primary"><a href="encuesta.php?ticket_id=<?php echo $usuarioTicked->id ?>" class="tabla-enlace">Encuesta</a></button>
+                                    <?php
+                                    if ($usuarioTicked->estado == "Finalizado") {
+                                    ?>
+                                        <button class="btn btn-primary"><a href="encuesta.php?ticket_id=<?php echo $usuarioTicked->id ?>" class="tabla-enlace">Encuesta</a></button>
+                                    <?php
+                                    }
+                                    ?>
                                 </td>
                             </tr>
                         <?php
@@ -94,6 +92,25 @@ $usuario = new Usuario();
             break;
         case "soporte":
         ?>
+            <nav>
+                <div class="contendor-menu">
+                    <a href="index.php" class="nombre-pagina">VIAJERO DIGITAL</a>
+                    <a href="inicio.php" class="nav-enlace">Inicio</i></a>
+                    <div class="contendor-submenu">
+                        <p class="nav-enlace nav-enlace-seleccionado">Reportes <i class="fa-solid fa-caret-down"></i></p>
+                        <div class="submenu">
+                            <a href="historial_ticked.php" class="nav-enlace-submenu">Historial</a>
+                        </div>
+                    </div>
+                    <a href="grafica.php" class="nav-enlace">Graficas</a>
+                </div>
+                <div class="div-enlaces">
+                    <a href="#" class="nav-enlace nav-enlace-subrayado"><?php echo json_decode($_SESSION["usuario"]); ?></a>
+                    <button class="nav-boton">
+                        <a href="salir.php" class="nav-boton-a">Salir <i class="fa-solid fa-right-from-bracket"></i></a>
+                    </button>
+                </div>
+            </nav>
             <main>
                 <!-- Formulario para seleccionar el estado -->
                 <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -143,20 +160,31 @@ $usuario = new Usuario();
                                     <td class="tabla-p">
                                         <?php
                                         $usuarioObjeto = $usuario->obtenerUsuarioPorId($usuarioTicket->id_usuario);
-                                        echo $usuarioObjeto ? $usuarioObjeto->usuario : "Usuario no disponible";
+                                        echo $usuarioObjeto->usuario;
                                         ?>
                                     </td>
                                     <td class="tabla-p"><?php echo $usuarioTicket->descripcion; ?></td>
                                     <td class="tabla-p"><?php echo $usuarioTicket->estado; ?></td>
                                     <td class="tabla-p"><?php echo date('Y-m-d', strtotime($usuarioTicket->fecha_creacion)); ?></td>
-                                    <td class="tabla-p"><?php echo date('Y-m-d', strtotime($usuarioTicket->fecha_cierre)); ?></td>
+                                    <td class="tabla-p"><?php
+                                                        if (date('Y-m-d', strtotime($usuarioTicket->fecha_cierre)) != "1970-01-01") {
+                                                            echo date('Y-m-d', strtotime($usuarioTicket->fecha_cierre));
+                                                        } else {
+                                                            echo "Sin Fecha";
+                                                        }
+                                                        ?>
+                                    </td>
                                     <td class="td-botones">
-                                        <button class="tabla-btn btn btn-primary">
-                                            <a href="respuesta_ticket.php?ticket_id=<?php echo $usuarioTicket->id; ?>" class="tabla-enlace">Responder</a>
-                                        </button>
-                                        <button class="tabla-btn btn btn-danger">
-                                            <a href="a_finalizar_ticket.php?ticket_id=<?php echo $usuarioTicket->id; ?>" class="tabla-enlace">Finalizar</a>
-                                        </button>
+                                        <?php
+                                        if ($usuarioTicket->estado != "Finalizado") {
+                                        ?>
+                                            <button class="tabla-btn btn btn-primary">
+                                                <a href="respuesta_ticket.php?ticket_id=<?php echo $usuarioTicket->id; ?>" class="tabla-enlace">Responder</a>
+                                            </button>
+                                            <button class="tabla-btn btn btn-danger">
+                                                <a href="a_finalizar_ticket.php?ticket_id=<?php echo $usuarioTicket->id; ?>" class="tabla-enlace">Finalizar</a>
+                                            </button>
+                                        <?php } ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

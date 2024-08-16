@@ -86,7 +86,16 @@ class Ticket extends Conexion
         }
     }
 
-
+    public function actualizarFechaCierre($ticketId, $fechaCierre) {
+        try{
+            $stmt=$this->conexion->prepare("UPDATE ticket SET fecha_cierre = ? WHERE id = ?");
+            $stmt->execute([$fechaCierre,$ticketId]);
+            return true;
+        }catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
 
     /*
     public function obtenerChatsPorTicket($ticket_id) {

@@ -4,7 +4,7 @@
 
 /* Propiedades/Variables Personalizadas */
 :root {
-    --a-color: white;
+    --a-color: black;
     --bg-nav-enlace: #086ed7;
     --bg-boton-1:#086ed7;
     --bg-boton-2: #086ed7;
@@ -23,6 +23,7 @@ nav {
     padding: 10px;
     height: 75px;
     font-family: "Poppins", sans-serif;
+    background: white;
 }
 
 a {

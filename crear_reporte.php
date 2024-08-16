@@ -33,16 +33,7 @@ session_start();
                     <a href="historial_ticked.php" class="nav-enlace-submenu">Historial</a>
                 </div>
             </div>
-            <div class="contendor-submenu">
-                <a href="#" class="nav-enlace">Chats <i class="fa-solid fa-caret-down"></i></a>
-                <div class="submenu">
-                    <a href="#" class="nav-enlace-submenu">Crear</a>
-                    <a href="#" class="nav-enlace-submenu">Modificar</a>
-                    <a href="#" class="nav-enlace-submenu">Eliminar</a>
-                    <a href="#" class="nav-enlace-submenu">Historial</a>
-                </div>
-            </div>
-            <a href="encuesta.php" class="nav-enlace">Encuesta</a>
+            <a href="historial_ticked.php" class="nav-enlace">Encuesta</a>
         </div>
         <div class="div-enlaces">
             <a href="#" class="nav-enlace nav-enlace-subrayado"><?php echo json_decode($_SESSION["usuario"]); ?></a>
