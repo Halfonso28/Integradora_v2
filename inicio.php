@@ -56,28 +56,25 @@ session_start();
             </nav>
 
             <section class="row" id="seccion-opciones">
+
                 <!-- Grupo Reportes -->
                 <div class="col-md-4 col-sm-12 seccion-grupo">
-                    <!-- <p class="seccion-titulo"></p>
-            <p class="seccion-subtitulo"></p> -->
                     <img src="IMG/persona-laptop.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">¿Tuviste problemas con tu viaje?</strong>
                     <p class="seccion-parrafo">Aqui te ayudamos a resolverlo. Genera un reporte dónde especifique lo que paso.</p>
                     <button class="seccion-boton"><a href="crear_reporte.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
+
                 <!-- Grupo Chat -->
                 <div class="col-md-4 col-sm-12 seccion-grupo">
-                    <!-- <p class="seccion-titulo"></p>
-            <p class="seccion-subtitulo"></p> -->
                     <img src="IMG/persona-hablando.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">Dale seguimiento a tus reportes hablando con nuestros especialistas.</strong>
                     <p class="seccion-parrafo">Comunicate de forma interactiva para solucionar tu problema.</p>
                     <button class="seccion-boton"><a href="historial_ticked.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
+
                 <!-- Grupo Encuesta -->
                 <div class="col-md-4 col-sm-12 seccion-grupo">
-                    <!-- <p class="seccion-titulo"></p>
-            <p class="seccion-subtitulo"></p> -->
                     <img src="IMG/encuesta.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">Satisfacción del cliente</strong>
                     <p class="seccion-parrafo">Completa un pequeña encuesta donde nos digas como fue el servicio de resolución de problemas.</p>
@@ -99,15 +96,7 @@ session_start();
                             <!-- <a href="./reporte_teresa/gradica.php" class="nav-enlace-submenu">Historial</a> -->
                         </div>
                     </div>
-                    <div class="contendor-submenu">
-                        <a href="#" class="nav-enlace">Chats <i class="fa-solid fa-caret-down"></i></a>
-                        <div class="submenu">
-                            <a href="#" class="nav-enlace-submenu">Crear</a>
-                            <a href="#" class="nav-enlace-submenu">Modificar</a>
-                            <a href="#" class="nav-enlace-submenu">Eliminar</a>
-                            <a href="#" class="nav-enlace-submenu">Historial</a>
-                        </div>
-                    </div>
+
                     <a href="encuesta.php" class="nav-enlace">Encuesta</a>
                 </div>
                 <div class="div-enlaces">
@@ -120,26 +109,20 @@ session_start();
 
             <section class="row" id="seccion-opciones">
                 <!-- Grupo Reportes -->
-                <!-- <div class="col-md-4 col-sm-12 seccion-grupo">
+                <div class="col-md-4 col-sm-12 seccion-grupo">
                     <img src="IMG/persona-laptop.jpg" alt="" class="seccion-imagen">
-                    <strong class="seccion-parrafo">¿Tuviste problemas con tu viaje?</strong>
-                    <p class="seccion-parrafo">Aqui te ayudamos a resolverlo. Genera un reporte dónde especifique lo que paso.</p>
+                    <strong class="seccion-parrafo">Reportes</strong>
+                    <p class="seccion-parrafo">Consulta los reportes nuevos</p>
                     <button class="seccion-boton"><a href="crear_reporte.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
-                </div> -->
-                <!-- Grupo Chat -->
-                <!-- <div class="col-md-4 col-sm-12 seccion-grupo">
-                    <img src="IMG/persona-hablando.jpg" alt="" class="seccion-imagen">
-                    <strong class="seccion-parrafo">Dale seguimiento a tus reportes hablando con nuestros especialistas.</strong>
-                    <p class="seccion-parrafo">Comunicate de forma interactiva para solucionar tu problema.</p>
-                    <button class="seccion-boton"><a href="grafica.html" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
-                </div> -->
+                </div>
+                
                 <!-- Grupo Encuesta -->
-                <!-- <div class="col-md-4 col-sm-12 seccion-grupo">
+                <div class="col-md-4 col-sm-12 seccion-grupo">
                     <img src="IMG/encuesta.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">Satisfacción del cliente</strong>
                     <p class="seccion-parrafo">Completa un pequeña encuesta donde nos digas como fue el servicio de resolución de problemas.</p>
                     <button class="seccion-boton"><a href="encuesta.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
-                </div> -->
+                </div>
             </section>
     <?php
             break;

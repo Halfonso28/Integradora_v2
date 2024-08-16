@@ -137,7 +137,7 @@ $usuario = new Usuario();
                     </thead>
                     <tbody>
                         <?php
-                        $tickeds = $ticked->obtenerTicketsPorEstado("Finalizado");
+                        $tickeds = $ticked->obtenerTicketsPorEstado("En progreso");
                         foreach ($tickeds as $usuarioTicked) {
                         ?>
                             <tr>
