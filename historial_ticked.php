@@ -61,44 +61,49 @@ $usuario = new Usuario();
             </nav>
 
             <main>
-                <?php
-                $tickeds = $ticked->obtenerTicketsPorUsuario($_SESSION["usuario_id"]);
-                foreach ($tickeds as $usuarioTicked) {
-                ?>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Usuario:</th>
-                                <th>Descripcion:</th>
-                                <th>Estado:</th>
-                                <th>Acciones:</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <table class="table table-striped mb-5">
+                    <thead>
+                        <tr>
+                            <th>Usuario:</th>
+                            <th>Descripcion:</th>
+                            <th>Estado:</th>
+                            <th>Acciones:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $tickeds = $ticked->obtenerTicketsPorUsuario($_SESSION["usuario_id"]);
+                        foreach ($tickeds as $usuarioTicked) {
+                        ?>
                             <tr>
                                 <td class="tabla-p"><?php echo json_decode($_SESSION['usuario']); ?></td>
                                 <td class="tabla-p td-descripcion"><?php echo $usuarioTicked->descripcion; ?></td>
                                 <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
                                 <td>
-                                    <button class="tabla-btn"><a href="encuesta.php" class="tabla-enlace">Encuesta</a></button>
-
+                                    <button class="btn btn-primary"><a href="encuesta.php?ticket_id=<?php echo $usuarioTicked->id ?>" class="tabla-enlace">Encuesta</a></button>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
-                <?php
-                }
-                ?>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </main>
 
-
-            
         <?php
             break;
         case "soporte":
         ?>
 
             <main>
+                <!-- <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                    <select name="estado" onchange="this.form.submit()">
+                        <option value="">Seleccionar Estado</option>
+                        <option value="Nuevo">Nuevo</option>
+                        <option value="En progreso">En progreso</option>
+                        <option value="Finalizado">Finalizado</option>
+                    </select>
+                </form> -->
                 <table class="table table-striped mb-5">
                     <thead>
                         <tr>
@@ -118,7 +123,7 @@ $usuario = new Usuario();
                                 <td class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></td>
                                 <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
                                 <td class="td-botones">
-                                <button class="tabla-btn btn btn-primary" ><a href="a_ticked.php?id=<?php echo $usuarioTicked->id;?>" class="tabla-enlace">Aceptar</a></button>
+                                    <button class="tabla-btn btn btn-primary"><a href="a_ticked.php?id=<?php echo $usuarioTicked->id; ?>" class="tabla-enlace">Aceptar</a></button>
                                 </td>
                             </tr>
                         <?php
@@ -138,6 +143,7 @@ $usuario = new Usuario();
                     <tbody>
                         <?php
                         $tickeds = $ticked->obtenerTicketsPorEstado("En progreso");
+                        if($tij)
                         foreach ($tickeds as $usuarioTicked) {
                         ?>
                             <tr>

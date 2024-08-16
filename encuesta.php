@@ -1,5 +1,6 @@
 <?php
 session_start();
+$_SESSION["ticket_id"]=$_GET["ticket_id"];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -20,7 +21,7 @@ session_start();
 
 <body>
     <a href="inicio.php"><i class="fa-solid fa-arrow-left"></i></a>
-    <form action="" method="POST" id="formulario">
+    <form action="a_encuesta.php" method="POST" id="formulario">
         <p class="formulario-titulo">Satisfaccion del Cliente</p>
         <p class="formulario-subtitulo">Lee y contesta correctamente la siguiente encuesta.</p>
         <!-- Pregunta 1 -->

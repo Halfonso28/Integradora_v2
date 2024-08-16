@@ -26,7 +26,7 @@ session_start();
     ?>
             <nav>
                 <div class="contendor-menu">
-                    <a href="index.php" class="nombre-pagina">VIAJERO DIGITAL</a>
+                    <a href="#" class="nombre-pagina">VIAJERO DIGITAL</a>
                     <a href="inicio.php" class="nav-enlace nav-enlace-seleccionado">Inicio</i></a>
                     <div class="contendor-submenu">
                         <p class="nav-enlace">Reportes <i class="fa-solid fa-caret-down"></i></p>

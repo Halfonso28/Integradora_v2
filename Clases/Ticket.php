@@ -22,6 +22,7 @@ class Ticket extends Conexion{
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
+            return null;
         }
     }
 
