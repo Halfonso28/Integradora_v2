@@ -96,67 +96,57 @@ $usuario = new Usuario();
         ?>
 
             <main>
-                <!-- <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                <!-- Formulario para seleccionar el estado -->
+                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                     <select name="estado" onchange="this.form.submit()">
-                        <option value="">Seleccionar Estado</option>
-                        <option value="Nuevo">Nuevo</option>
-                        <option value="En progreso">En progreso</option>
-                        <option value="Finalizado">Finalizado</option>
+                        <option value="Nuevo" <?php if (isset($_POST['estado']) && $_POST['estado'] == 'Nuevo') echo 'selected'; ?>>Nuevo</option>
+                        <option value="En progreso" <?php if (isset($_POST['estado']) && $_POST['estado'] == 'En progreso') echo 'selected'; ?>>En progreso</option>
+                        <option value="Finalizado" <?php if (isset($_POST['estado']) && $_POST['estado'] == 'Finalizado') echo 'selected'; ?>>Finalizado</option>
                     </select>
-                </form> -->
-                <table class="table table-striped mb-5">
-                    <thead>
-                        <tr>
-                            <th>Usuario:</th>
-                            <th>Descripcion:</th>
-                            <th>Estado:</th>
-                            <th>Acciones:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $tickeds = $ticked->obtenerTicketsPorEstado("Nuevo");
-                        foreach ($tickeds as $usuarioTicked) {
-                        ?>
-                            <tr>
-                                <td class="tabla-p"><?php echo $usuario->obtenerUsuarioPorId($usuarioTicked->id_usuario)->usuario; ?></td>
-                                <td class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></td>
-                                <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
-                                <td class="td-botones">
-                                    <button class="tabla-btn btn btn-primary"><a href="a_ticked.php?id=<?php echo $usuarioTicked->id; ?>" class="tabla-enlace">Aceptar</a></button>
-                                </td>
-                            </tr>
-                        <?php
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                </form>
 
-                <table class="table table-striped mt-5">
-                    <thead>
-                        <tr>
-                            <th>Usuario:</th>
-                            <th>Descripcion:</th>
-                            <th>Estado:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $tickeds = $ticked->obtenerTicketsPorEstado("En progreso");
-                        if($tij)
-                        foreach ($tickeds as $usuarioTicked) {
-                        ?>
+                <?php
+                // Obtener el estado seleccionado o por defecto "Nuevo"
+                $estadoSeleccionado = isset($_POST['estado']) && $_POST['estado'] !== '' ? $_POST['estado'] : 'Nuevo';
+
+                // Obtener los tickets según el estado seleccionado
+                $tickeds = $ticked->obtenerTicketsPorEstado($estadoSeleccionado);
+
+                // Si hay tickets, muestra la tabla
+                if (!empty($tickeds)) {
+                ?>
+                    <table class="table table-striped mb-5">
+                        <thead>
                             <tr>
-                                <td class="tabla-p"><?php echo $usuario->obtenerUsuarioPorId($usuarioTicked->id_usuario)->usuario; ?></td>
-                                <td class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></td>
-                                <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
+                                <th>Usuario:</th>
+                                <th>Descripcion:</th>
+                                <th>Estado:</th>
+                                <th>Acciones:</th>
                             </tr>
-                        <?php
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($tickeds as $usuarioTicked): ?>
+                                <tr>
+                                    <td class="tabla-p"><?php echo $usuario->obtenerUsuarioPorId($usuarioTicked->id_usuario)->usuario; ?></td>
+                                    <td class="tabla-p"><?php echo $usuarioTicked->descripcion; ?></td>
+                                    <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
+                                    <td class="td-botones">
+                                        <button class="tabla-btn btn btn-primary">
+                                            <a href="a_ticked.php?id=<?php echo $usuarioTicked->id; ?>" class="tabla-enlace">Aceptar</a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php
+                } else {
+                    // Si no hay tickets para el estado seleccionado, muestra un mensaje
+                    echo "<p>No hay tickets en el estado seleccionado: $estadoSeleccionado.</p>";
+                }
+                ?>
             </main>
+
     <?php
             break;
     }

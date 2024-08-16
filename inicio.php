@@ -33,16 +33,6 @@ session_start();
                         <div class="submenu">
                             <a href="crear_reporte.php" class="nav-enlace-submenu">Crear</a>
                             <a href="historial_ticked.php" class="nav-enlace-submenu">Historial</a>
-                            <!-- <a href="./reporte_teresa/gradica.php" class="nav-enlace-submenu">Historial</a> -->
-                        </div>
-                    </div>
-                    <div class="contendor-submenu">
-                        <a href="#" class="nav-enlace">Chats <i class="fa-solid fa-caret-down"></i></a>
-                        <div class="submenu">
-                            <a href="#" class="nav-enlace-submenu">Crear</a>
-                            <a href="#" class="nav-enlace-submenu">Modificar</a>
-                            <a href="#" class="nav-enlace-submenu">Eliminar</a>
-                            <a href="#" class="nav-enlace-submenu">Historial</a>
                         </div>
                     </div>
                     <a href="encuesta.php" class="nav-enlace">Encuesta</a>
@@ -63,14 +53,6 @@ session_start();
                     <strong class="seccion-parrafo">¿Tuviste problemas con tu viaje?</strong>
                     <p class="seccion-parrafo">Aqui te ayudamos a resolverlo. Genera un reporte dónde especifique lo que paso.</p>
                     <button class="seccion-boton"><a href="crear_reporte.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
-                </div>
-
-                <!-- Grupo Chat -->
-                <div class="col-md-4 col-sm-12 seccion-grupo">
-                    <img src="IMG/persona-hablando.jpg" alt="" class="seccion-imagen">
-                    <strong class="seccion-parrafo">Dale seguimiento a tus reportes hablando con nuestros especialistas.</strong>
-                    <p class="seccion-parrafo">Comunicate de forma interactiva para solucionar tu problema.</p>
-                    <button class="seccion-boton"><a href="historial_ticked.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
 
                 <!-- Grupo Encuesta -->
@@ -112,7 +94,7 @@ session_start();
                 <div class="col-md-4 col-sm-12 seccion-grupo">
                     <img src="IMG/persona-laptop.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">Reportes</strong>
-                    <p class="seccion-parrafo">Consulta los reportes nuevos</p>
+                    <p class="seccion-parrafo">Accede a los reportes recientes relacionados con los viajes. Aquí podrás revisar en detalle todos los informes generados para los viajes realizados, que incluyen cualquier incidencia, comentario o sugerencia presentada por los usuarios.</p>
                     <button class="seccion-boton"><a href="crear_reporte.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
                 

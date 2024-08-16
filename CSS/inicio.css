@@ -168,6 +168,7 @@ a {
 }
 
 .seccion-grupo {
+    width: 40%;
     font-family: "Poppins", sans-serif;
     display: block;
     background-color: white;
@@ -295,37 +296,3 @@ a {
         max-width: 100%;
     }
 }
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) and (max-width: 1199.98px) {
-    #seccion-opciones {
-        gap: 30px;
-    }
-
-    .seccion-grupo {
-        width: 30%;
-    }
-}
-
-/* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) and (max-width: 1399.98px) {
-    #seccion-opciones {
-        gap: 40px;
-    }
-
-    .seccion-grupo {
-        width: 30%;
-    }
-}
-
-/* Extra extra large devices (larger desktops, 1400px and up) */
-@media (min-width: 1400px) {
-    #seccion-opciones {
-        gap: 50px;
-    }
-
-    .seccion-grupo {
-        width: 25%;
-    }
-}
-    
