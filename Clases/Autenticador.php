@@ -16,6 +16,12 @@ class Autenticador extends Conexion{
                 $_SESSION['usuario'] = json_encode($usuario->usuario);
                 $_SESSION['rol'] = $usuario->rol;
                 $_SESSION['estadoSesion']=true;
+                if($_SESSION["rol"]=="soporte"){
+                    $stmt = $this->conexion->prepare("SELECT * FROM soporte WHERE id_usuario = ?");
+                    $stmt->execute([$_SESSION["usuario_id"]]);
+                    $usuario=$stmt->fetchObject();
+                    $_SESSION["soporte_id"]=$usuario->id;
+                }
                 return true;
             } else {
                 session_start();
