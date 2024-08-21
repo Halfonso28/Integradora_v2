@@ -7,6 +7,11 @@ class Encuesta extends Conexion
         parent::__construct();
     }
 
+    public function verPreguntas(){
+        $stmt=$this->conexion->prepare("SELECT * FROM wiew_preguntas");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
 
     public function insertarRespuesta($ticket_id,$pregunta_id,$calificacion){
         $sql = "INSERT INTO respuestas (id_ticket,pregunta_id,calificacion) VALUES (?,?,?)";
@@ -20,6 +25,20 @@ class Encuesta extends Conexion
         }
     }
 
+    public function actualizarEstadoEncuesta($ticket_id){
+        $sql = "Call actualizar_estado_encuesta(?)";
+        $stmt = $this->conexion->prepare($sql);
+        try {
+            $stmt->execute([$ticket_id]);
+            return true;
+        } catch (PDOException $e) {
+            echo $e;
+            return false;
+        }
+    }
+
+
+    
 
     public function insertarPregunta($texto)
     {

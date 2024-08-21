@@ -3,8 +3,8 @@ session_start();
 require_once("Clases/Ticket.php");
 require_once("Clases/Usuario.php");
 
-$ticked = new Ticket();
-$usuario = new Usuario();
+$cTicket = new Ticket();
+$cUsuario = new Usuario();
 
 ?>
 
@@ -32,7 +32,7 @@ $usuario = new Usuario();
     ?>
             <nav>
                 <div class="contendor-menu">
-                    <a href="index.php" class="nombre-pagina">VIAJERO DIGITAL</a>
+                    <a href="#" class="nombre-pagina">VIAJERO DIGITAL</a>
                     <a href="inicio.php" class="nav-enlace">Inicio</i></a>
                     <div class="contendor-submenu">
                         <a href="#" class="nav-enlace nav-enlace-seleccionado">Reportes <i class="fa-solid fa-caret-down"></i></a>
@@ -58,24 +58,43 @@ $usuario = new Usuario();
                             <th>Usuario:</th>
                             <th>Descripcion:</th>
                             <th>Estado:</th>
-                            <th>Acciones:</th>
+                            <th>Fecha Creación:</th>
+                            <th>Fecha Fin:</th>
+                            <?php
+                            if ($cTicket->verificarEstadoTicket("Finalizado", $_SESSION["usuario_id"])==true) {
+                            ?>
+                                <th>Acciones:</th>
+                            <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
 
-                        $tickeds = $ticked->obtenerTicketsPorUsuario($_SESSION["usuario_id"]);
-                        foreach ($tickeds as $usuarioTicked) {
+                        $cTickets = $cTicket->obtenerTicketsPorUsuario($_SESSION["usuario_id"]);
+                        foreach ($cTickets as $ticketResultado) {
                         ?>
                             <tr>
                                 <td class="tabla-p"><?php echo json_decode($_SESSION['usuario']); ?></td>
-                                <td class="tabla-p td-descripcion"><?php echo $usuarioTicked->descripcion; ?></td>
-                                <td class="tabla-p"><?php echo $usuarioTicked->estado; ?></td>
+                                <td class="tabla-p tabla-p-descripcion"><?php echo $ticketResultado->descripcion; ?></td>
+                                <td class="tabla-p"><?php echo $ticketResultado->estado; ?></td>
+                                <td class="tabla-p"><?php echo date('Y-m-d', strtotime($ticketResultado->fecha_creacion)); ?></td>
+                                    <td class="tabla-p"><?php
+                                                        if (date('Y-m-d', strtotime($ticketResultado->fecha_cierre)) != "1970-01-01") {
+                                                            echo date('Y-m-d', strtotime($ticketResultado->fecha_cierre));
+                                                        } else {
+                                                            echo "Sin Fecha";
+                                                        } ?>
+                                    </td>
                                 <td>
                                     <?php
-                                    if ($usuarioTicked->estado == "Finalizado") {
+                                    if ($ticketResultado->estado == "Finalizado"&&$ticketResultado->estado_encuesta==false) {
                                     ?>
-                                        <button class="btn btn-primary"><a href="encuesta.php?ticket_id=<?php echo $usuarioTicked->id ?>" class="tabla-enlace">Encuesta</a></button>
+                                        <button class="btn btn-success"><a href="encuesta.php?ticket_id=<?php echo $ticketResultado->id ?>" class="tabla-enlace">Encuesta</a></button>
+                                    <?php
+                                    } 
+                                    if ($ticketResultado->estado == "En progreso") {
+                                    ?>
+                                        <button class="btn btn-primary"><a href="respuesta_ticket.php?ticket_id=<?php echo $ticketResultado->id ?>" class="tabla-enlace">Responder</a></button>
                                     <?php
                                     }
                                     ?>
@@ -90,16 +109,19 @@ $usuario = new Usuario();
 
         <?php
             break;
+
+
+            // SOPORTE --------------------------------------------------------------------------------------------------------------------------------
         case "soporte":
         ?>
             <nav>
                 <div class="contendor-menu">
-                    <a href="index.php" class="nombre-pagina">VIAJERO DIGITAL</a>
+                    <a href="#" class="nombre-pagina">VIAJERO DIGITAL</a>
                     <a href="inicio.php" class="nav-enlace">Inicio</i></a>
                     <div class="contendor-submenu">
                         <p class="nav-enlace nav-enlace-seleccionado">Reportes <i class="fa-solid fa-caret-down"></i></p>
                         <div class="submenu">
-                            <a href="historial_ticked.php" class="nav-enlace-submenu">Historial</a>
+                            <a href="historial_ticket.php" class="nav-enlace-submenu">Historial</a>
                         </div>
                     </div>
                     <a href="grafica.php" class="nav-enlace">Graficas</a>
@@ -121,7 +143,7 @@ $usuario = new Usuario();
                     </select>
                     <input type="date" name="fecha_inicio" value="<?php echo isset($_POST['fecha_inicio']) ? $_POST['fecha_inicio'] : ''; ?>" placeholder="Fecha inicio">
                     <input type="date" name="fecha_fin" value="<?php echo isset($_POST['fecha_fin']) ? $_POST['fecha_fin'] : ''; ?>" placeholder="Fecha fin">
-                    <button type="submit">Filtrar</button>
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
                 </form>
 
 
@@ -131,17 +153,17 @@ $usuario = new Usuario();
                 $fechaInicio = isset($_POST['fecha_inicio']) && !empty($_POST['fecha_inicio']) ? $_POST['fecha_inicio'] : null;
                 $fechaFin = isset($_POST['fecha_fin']) && !empty($_POST['fecha_fin']) ? $_POST['fecha_fin'] : null;
 
-                // Lógica para obtener los tickets filtrados por estado y rango de fechas
+                // Lógica para obtener los cTickets filtrados por estado y rango de fechas
                 if ($fechaInicio && $fechaFin) {
-                    $tickeds = $ticked->obtenerTicketsPorFecha($fechaInicio, $fechaFin);
+                    $cTickets = $cTicket->obtenerTicketsPorFecha($fechaInicio, $fechaFin);
                 } elseif ($fechaInicio) {
-                    $tickeds = $ticked->obtenerTicketsPorFecha($fechaInicio, $fechaInicio);
+                    $cTickets = $cTicket->obtenerTicketsPorFecha($fechaInicio, $fechaInicio);
                 } else {
-                    $tickeds = $ticked->obtenerTicketsPorEstado($estadoSeleccionado);
+                    $cTickets = $cTicket->obtenerTicketsPorEstado($estadoSeleccionado);
                 }
 
-                // Si hay tickets, muestra la tabla
-                if (!empty($tickeds)) {
+                // Si hay cTickets, muestra la tabla
+                if (!empty($cTickets)) {
                 ?>
                     <table class="table table-striped mb-5">
                         <thead>
@@ -151,38 +173,41 @@ $usuario = new Usuario();
                                 <th>Estado:</th>
                                 <th>Fecha Creación:</th>
                                 <th>Fecha Fin:</th>
-                                <th>Acciones:</th>
+                                <?php
+                                if ($estadoSeleccionado == "Nuevo" || $estadoSeleccionado == "En progreso") {
+                                ?>
+                                    <th>Acciones:</th>
+                                <?php } ?>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($tickeds as $usuarioTicket): ?>
+                            <?php foreach ($cTickets as $ticketResultado): ?>
                                 <tr>
                                     <td class="tabla-p">
                                         <?php
-                                        $usuarioObjeto = $usuario->obtenerUsuarioPorId($usuarioTicket->id_usuario);
+                                        $usuarioObjeto = $cUsuario->obtenerUsuarioPorId($ticketResultado->id_usuario);
                                         echo $usuarioObjeto->usuario;
                                         ?>
                                     </td>
-                                    <td class="tabla-p"><?php echo $usuarioTicket->descripcion; ?></td>
-                                    <td class="tabla-p"><?php echo $usuarioTicket->estado; ?></td>
-                                    <td class="tabla-p"><?php echo date('Y-m-d', strtotime($usuarioTicket->fecha_creacion)); ?></td>
+                                    <td class="tabla-p tabla-p-descripcion"><?php echo $ticketResultado->descripcion; ?></td>
+                                    <td class="tabla-p"><?php echo $ticketResultado->estado; ?></td>
+                                    <td class="tabla-p"><?php echo date('Y-m-d', strtotime($ticketResultado->fecha_creacion)); ?></td>
                                     <td class="tabla-p"><?php
-                                                        if (date('Y-m-d', strtotime($usuarioTicket->fecha_cierre)) != "1970-01-01") {
-                                                            echo date('Y-m-d', strtotime($usuarioTicket->fecha_cierre));
+                                                        if (date('Y-m-d', strtotime($ticketResultado->fecha_cierre)) != "1970-01-01") {
+                                                            echo date('Y-m-d', strtotime($ticketResultado->fecha_cierre));
                                                         } else {
                                                             echo "Sin Fecha";
-                                                        }
-                                                        ?>
+                                                        } ?>
                                     </td>
                                     <td class="td-botones">
                                         <?php
-                                        if ($usuarioTicket->estado != "Finalizado") {
+                                        if ($ticketResultado->estado != "Finalizado") {
                                         ?>
                                             <button class="tabla-btn btn btn-primary">
-                                                <a href="respuesta_ticket.php?ticket_id=<?php echo $usuarioTicket->id; ?>" class="tabla-enlace">Responder</a>
+                                                <a href="respuesta_ticket.php?ticket_id=<?php echo $ticketResultado->id; ?>" class="tabla-enlace">Responder</a>
                                             </button>
                                             <button class="tabla-btn btn btn-danger">
-                                                <a href="a_finalizar_ticket.php?ticket_id=<?php echo $usuarioTicket->id; ?>" class="tabla-enlace">Finalizar</a>
+                                                <a href="a_finalizar_ticket.php?ticket_id=<?php echo $ticketResultado->id; ?>" class="tabla-enlace">Finalizar</a>
                                             </button>
                                         <?php } ?>
                                     </td>
@@ -192,7 +217,7 @@ $usuario = new Usuario();
                     </table>
                 <?php
                 } else {
-                    // Si no hay tickets para el estado seleccionado, muestra un mensaje
+                    // Si no hay cTickets para el estado seleccionado, muestra un mensaje
                     echo "<p>No hay tickets en el estado seleccionado: $estadoSeleccionado.</p>";
                 }
                 ?>

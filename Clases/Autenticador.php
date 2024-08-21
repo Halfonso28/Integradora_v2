@@ -20,7 +20,9 @@ class Autenticador extends Conexion{
                     $stmt = $this->conexion->prepare("SELECT * FROM soporte WHERE id_usuario = ?");
                     $stmt->execute([$_SESSION["usuario_id"]]);
                     $usuario=$stmt->fetchObject();
-                    $_SESSION["soporte_id"]=$usuario->id;
+                    $stmt = $this->conexion->prepare("CALL obtener_soporte_por_usuario(?)");
+                    $stmt->execute([$_SESSION['usuario_id']]);
+                    $_SESSION["soporte_id"]= $stmt->fetchObject()->id;
                 }
                 return true;
             } else {

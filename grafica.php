@@ -1,8 +1,10 @@
 <?php
 require_once("Clases/Conexion.php");
+require_once("Clases/Encuesta.php");
 session_start();
 // Instanciar la clase Conexion
 $conexionObj = new Conexion();
+$cEncuesta = new Encuesta();
 $conexion = $conexionObj->getConexion();
 ?>
 
@@ -67,7 +69,7 @@ GROUP BY
 <body>
   <nav>
     <div class="contendor-menu">
-      <a href="index.php" class="nombre-pagina">VIAJERO DIGITAL</a>
+      <a href="#" class="nombre-pagina">VIAJERO DIGITAL</a>
       <a href="inicio.php" class="nav-enlace">Inicio</i></a>
       <div class="contendor-submenu">
         <p class="nav-enlace">Reportes <i class="fa-solid fa-caret-down"></i></p>
@@ -85,7 +87,18 @@ GROUP BY
     </div>
   </nav>
   <div id="columnchart_material" class="grafica"></div>
-   
+  <main>
+    <p class="titulo">Glosario</p>
+      <?php
+    $preguntas = $cEncuesta->verPreguntas();
+
+    foreach ($preguntas as $pregunta) {
+    ?>
+      <p><strong><?php echo $pregunta->id ?>.- </strong><?php echo $pregunta->pregunta ?></p>
+    <?php
+    }
+    ?>
+  </main>
 </body>
 
 </html>

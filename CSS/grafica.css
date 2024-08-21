@@ -164,9 +164,34 @@ a {
 /* Fin estilos Barra de Navegacion */
 
 .grafica{
-    width: 80%;
-    height: 80%;
+    width: 90%;
+    height: 90%;
     margin: auto;
     margin-top: 50px;
-    border: 10px solid white;
+    border: 15px solid white;
+    font-size: 18px;
+}
+
+main{
+    width: 900px;
+    background: white;
+    margin: auto;
+    margin-top: 50px;
+    padding: 25px;
+    border-radius: 10px;
+}
+main p{
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+}
+.titulo{
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+}
+.subtitulo{
+    text-align: center;
+}
+text {
+    font-size: 18px !important;
 }

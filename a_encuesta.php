@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $encuesta->insertarRespuesta($ticket_id,13,$pregunta_13);
     $encuesta->insertarRespuesta($ticket_id,14,$pregunta_14);
     $encuesta->insertarRespuesta($ticket_id,15,$pregunta_15);
-
+    $encuesta->actualizarEstadoEncuesta($ticket_id);
     header("location:inicio.php");
 
 }

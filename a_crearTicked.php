@@ -7,7 +7,7 @@ session_start();
 $descripcion=$_POST["descripcion"];
 
 $ticked=new Ticket();
-$ticked->crearTicket($_SESSION["usuario_id"],$descripcion);
+$ticked->crearTicket($_SESSION["usuario_id"],"<Strong>Problema: </Strong>".$descripcion);
 
 header("location:historial_ticked.php");
 

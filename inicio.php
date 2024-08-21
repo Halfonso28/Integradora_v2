@@ -65,11 +65,14 @@ session_start();
             </section>
         <?php
             break;
+
+        // SOPORTE--------------------------------------------------- 
+            
         case "soporte":
         ?>
             <nav>
                 <div class="contendor-menu">
-                    <a href="index.php" class="nombre-pagina">VIAJERO DIGITAL</a>
+                    <a href="#" class="nombre-pagina">VIAJERO DIGITAL</a>
                     <a href="inicio.php" class="nav-enlace nav-enlace-seleccionado">Inicio</i></a>
                     <div class="contendor-submenu">
                         <p class="nav-enlace">Reportes <i class="fa-solid fa-caret-down"></i></p>
@@ -92,7 +95,7 @@ session_start();
                 <div class="col-md-4 col-sm-12 seccion-grupo">
                     <img src="IMG/persona-laptop.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">Reportes</strong>
-                    <p class="seccion-parrafo">Accede a los reportes recientes relacionados con los viajes. Aquí podrás revisar en detalle todos los informes generados para los viajes realizados, que incluyen cualquier incidencia, comentario o sugerencia presentada por los usuarios.</p>
+                    <p class="seccion-parrafo">Accede a los reportes recientes relacionados con los viajes. Aquí podrás revisar en detalle todos los informes generados para los viajes realizados.</p>
                     <button class="seccion-boton"><a href="historial_ticked.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
                 
@@ -100,7 +103,7 @@ session_start();
                 <div class="col-md-4 col-sm-12 seccion-grupo">
                     <img src="IMG/encuesta.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">Graficas</strong>
-                    <p class="seccion-parrafo">Accede a un análisis detallado de las calificaciones proporcionadas por los usuarios en sus reportes de viajes. Esta funcionalidad te permite observar cómo los usuarios valoran su experiencia. </p>
+                    <p class="seccion-parrafo">Accede a un análisis detallado de las calificaciones proporcionadas por los usuarios en sus reportes de viajes. </p>
                     <button class="seccion-boton"><a href="grafica.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
             </section>

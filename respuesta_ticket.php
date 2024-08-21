@@ -4,9 +4,9 @@ require_once("Clases/Ticket.php");
 require_once("Clases/Usuario.php");
 require_once("Clases/Soporte.php");
 
-$ticket = new Ticket();
-$usuario = new Usuario();
-$soporte = new Soporte();
+$cTicket = new Ticket();
+$cUsuario = new Usuario();
+$cSoporte = new Soporte();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $ticket_id = $_GET["ticket_id"];
@@ -27,23 +27,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     <!-- FontAwesome -->
     <script src="https://kit.fontawesome.com/79795cbd8e.js" crossorigin="anonymous"></script>
     <!-- Fin de Enlaces Externos -->
-    <link rel="stylesheet" href="CSS/historial_reporte.css">
+    <link rel="stylesheet" href="CSS/respuesta_ticket.css">
     <link rel="stylesheet" href="CSS/fuentes.css">
     <link rel="icon" href="IMG/logo.png" type="image/x-icon">
-    <title>Historial Reportes</title>
+    <title>Reponder Reporte</title>
 </head>
 
 <body>
+    <a href="inicio.php"><i class="fa-solid fa-arrow-left"></i></a>
     <main>
         <?php
-        $ticketUsuario = $ticket->obtenerTicketPorId($ticket_id);
+        $ticketUsuario = $cTicket->obtenerTicketPorId($ticket_id);
         ?>
-        <p class="tabla-p">Usuario: <?php echo $usuario->obtenerUsuarioPorId($ticketUsuario->id_usuario)->usuario; ?></p>
-        <p class="tabla-p">Descripcion: <?php echo $ticketUsuario->descripcion; ?></p>
+        <div class="div-p">
+            <p class="p-ticket"><strong>Soporte:</strong>
+                <?php
+                try {
+                    $resultado = $cUsuario->obtenerUsuarioPorSoporteId($ticketUsuario->id_soporte);
+                    if (!$resultado || !isset($resultado->usuario)) {
+                        throw new Exception("No se pudo obtener el usuario con ID de soporte: " . $ticketUsuario->id_soporte);
+                    }
+                    $usuario = $resultado->usuario;
+                    echo $usuario;
+                } catch (Exception $e) {
+                    echo "S/A";
+                }
+                ?>
+
+            </p>
+            <p class="p-ticket"><strong>Usuario:</strong> <?php echo $cUsuario->obtenerUsuarioPorId($ticketUsuario->id_usuario)->usuario; ?></p>
+        </div>
         <form action="a_respuesta_ticket.php?ticket_id=<?php echo $ticket_id ?>" method="post">
-           <input type="text" name="respuesta">
-           <button class="btn btn-primary" type="submit">Enviar</button>
-           <button class="btn btn-danger" type="submit">Finalizar</button>
+            <p class="p-ticket"><?php echo $ticketUsuario->descripcion; ?></p>
+            <textarea name="respuesta" required></textarea>
+            <button class="btn btn-primary" type="submit">Enviar</button>
         </form>
     </main>
 
