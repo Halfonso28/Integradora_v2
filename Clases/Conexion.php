@@ -1,8 +1,8 @@
 <?php
 class Conexion {
     private $host = "localhost";
-    private $usuario = "super";
-    private $contraseña = "1234";
+    private $usuario = "root";
+    private $contraseña = "";
     private $database = "reportes";
     protected $conexion;
 
