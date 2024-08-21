@@ -60,7 +60,7 @@ session_start();
                     <img src="IMG/encuesta.jpg" alt="" class="seccion-imagen">
                     <strong class="seccion-parrafo">Satisfacción del cliente</strong>
                     <p class="seccion-parrafo">Completa un pequeña encuesta donde nos digas como fue el servicio de resolución de problemas.</p>
-                    <button class="seccion-boton"><a href="encuesta.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
+                    <button class="seccion-boton"><a href="historial_ticked.php" class="seccion-boton-a">Clic Aqui <i class="fa-solid fa-arrow-pointer"></i></a></button>
                 </div>
             </section>
         <?php
